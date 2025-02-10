@@ -12,13 +12,13 @@
     <!-- Sottomenù per la gestione dei dispositivi muletto -->
     <menuitem id="tech_repair_loaner_device_menu" name="Dispositivi Muletto" parent="tech_repair_management_main_menu" sequence="2"/>
     <menuitem id="tech_repair_loaner_device_submenu" name="Gestione Muletto" parent="tech_repair_loaner_device_menu" action="action_tech_repair_loaner"/>
-    
+    <menuitem id="tech_repair_software" name="Gestione Software" parent="tech_repair_management_main_menu" action="action_tech_repair_software"/>
 
     <menuitem id="tech_repair_config_menu" name="Configurazione" parent="tech_repair_management_main_menu" sequence="3"/>
     <menuitem id="tech_repair_category_menu" name="Categorie Dispositivi" parent="tech_repair_config_menu" action="action_tech_repair_category"/>
     <menuitem id="tech_repair_brand_menu" name="Marche Dispositivi" parent="tech_repair_config_menu" action="action_tech_repair_brand"/>
     <menuitem id="tech_repair_model_menu" name="Modelli Dispositivi" parent="tech_repair_config_menu" action="action_tech_repair_model"/>
-    <menuitem id="tech_repair_software" name="Software" parent="tech_repair_config_menu" action="action_tech_repair_software"/>
+    
     <!-- Sottomenù per la gestione degli stati di riparazione -->
     <menuitem id="tech_repair_state_submenu" name="Gestione Stati" parent="tech_repair_config_menu" action="action_tech_repair_state"/>
     <menuitem id="tech_repair_tech_repair_state_public" name="Stati Online per il Cliente" parent="tech_repair_config_menu" action="action_tech_repair_state_public"/>

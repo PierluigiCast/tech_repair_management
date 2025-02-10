@@ -8,6 +8,8 @@
                     <div name="button_box">
                         <button name="action_save_repair" type="object" string="Salva" class="oe_highlight" icon="fa-save"/>
                         <button name="action_print_repair_report" type="object" string="Commessa" class="oe_highlight" icon="fa-print"/>
+                        <!-- Bottone per forzare l'invio dell'email -->
+                        <button name="action_force_send_renewal_email" type="object" string="Invia Email di Rinnovo" class="oe_highlight"/>
                     </div>
                     <field name="state_id" widget="badge" options="{'clickable': True}"/>
                 </header>
@@ -134,7 +136,11 @@
                             </field>
                         </page>
 					</notebook>
+                    <footer>
+                        
+                    </footer>
                 </sheet>
+                
                 <chatter>
                     <field name="message_ids"/>
                     <field name="activity_ids"/>

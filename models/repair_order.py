@@ -175,6 +175,9 @@ class RepairOrder(models.Model):
     readonly=True
     )
 
+    renewal_date = fields.Date(string="Data di Rinnovo", compute="_compute_renewal_date", store=True, tracking=True)  # Scadenza della commessa
+
+
     chat_message_ids = fields.One2many(
         'tech.repair.chat.message', 
         'tech_repair_order_id', 
@@ -198,6 +201,13 @@ class RepairOrder(models.Model):
         string="Informativa",
         help="Seleziona l'informativa da allegare alla riparazione.",
         default=_default_term
+    )
+
+    company_id = fields.Many2one(
+        'res.company',
+        string="Azienda",
+        required=True,
+        default=lambda self: self.env.company
     )
 
     
@@ -546,6 +556,73 @@ class RepairOrder(models.Model):
             lab_cost = sum(record.external_lab_ids.mapped('customer_cost'))  # Somma costi di tutti i laboratori
             software_cost = sum(record.software_ids.mapped('price'))  # Somma i costi dei software
             record.expected_total = (record.tech_repair_cost + software_cost + lab_cost + component_cost) - record.advance_payment
+
+
+    # Calcola la scadenza della commessa in base al software con durata maggiore
+    @api.depends('software_ids', 'close_date')
+    def _compute_renewal_date(self):
+        for record in self:
+            if record.software_ids and record.close_date:
+                # Trova la durata massima tra i software installati
+                max_duration = max(int(software.duration) for software in record.software_ids)
+                record.renewal_date = record.close_date + timedelta(days=max_duration * 30)
+            else:
+                record.renewal_date = False
+
+    # Controlla le commesse in scadenza e invia un'email di promemoria 1 mese prima
+    @api.model
+    def check_repair_renewals(self):
+        today = fields.Date.today()
+        renewal_alert_date = today + timedelta(days=1)  # 1 mese prima della scadenza (impostato a 1 per test)
+
+        # Trova le commesse con scadenza tra 30 giorni
+        orders_to_renew = self.search([
+            ('renewal_date', '=', renewal_alert_date),
+            ('customer_id', '!=', False)
+        ])
+
+        mail_template = self.env.ref('tech_repair_management.email_template_repair_renewal')
+
+        for order in orders_to_renew:
+            # Invia una mail al cliente
+            if mail_template:
+                mail_template.send_mail(order.customer_id.id, force_send=True)
+
+            # Crea un'opportunità CRM per il rinnovo della commessa
+            self.env['crm.lead'].create({
+                'name': f"Rinnovo Commessa {order.name}",
+                'partner_id': order.customer_id.id,
+                'type': 'opportunity',
+                'description': f"Rinnovo della commessa {order.name} per {order.customer_id.name}. Scadenza: {order.renewal_date}",
+                'expected_revenue': sum(order.software_ids.mapped('price')),
+                'probability': 50,
+            })
+
+    # Forza l'invio dell'email di rinnovo al cliente
+    def action_force_send_renewal_email(self):
+        mail_template = self.env.ref('tech_repair_management.email_template_repair_renewal')
+
+        for record in self:
+            if not record.renewal_date:
+                raise UserError("Non è possibile inviare la mail: la commessa non ha una data di rinnovo impostata.")
+
+            if not record.customer_id.email:
+                raise UserError(f"Il cliente {record.customer_id.name} non ha un'email impostata!")
+
+            if mail_template:
+
+                email_values = {
+                    'email_to': record.customer_id.email,
+                    'email_from': record.company_id.email or '',
+                    'body_html': mail_template.body_html.replace('${object.customer_id.name}', record.customer_id.name).replace('${object.renewal_date}', str(record.renewal_date)),
+                }
+                
+                mail_template.send_mail(record.id, force_send=True, email_values=email_values)
+
+                record.message_post(
+                    body=f"⚡ Email di rinnovo inviata manualmente a {record.customer_id.email}.",
+                    message_type="comment"
+                )
 
     # Gestione del tasto invia messaggio al cliente online
     def action_send_message(self):

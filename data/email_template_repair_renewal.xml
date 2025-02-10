@@ -1,0 +1,16 @@
+<odoo>
+    <record id="email_template_repair_renewal" model="mail.template">
+        <field name="name">TECH Gestione Riparazioni: Promemoria Scadenza Software</field>
+        <field name="email_from"></field>
+        <field name="subject">Rinnovo Licenze Software</field>
+        <field name="model_id" ref="model_tech_repair_order"/>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html"><![CDATA[
+            <p>Buongiorno ${object.customer_id.name},</p>
+            <p>Ti ricordiamo che i software installati sul tuo pc sono in scadenza il <strong>${object.renewal_date}</strong>.</p>
+            <p>Per evitare problemi, ti consigliamo di contattarci per il rinnovo.</p>
+            <p>Grazie!</p>
+            <p>Staff - TECH 3.0 Srl</p>
+        ]]></field>
+    </record>
+</odoo>
