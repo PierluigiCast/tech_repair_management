@@ -1,0 +1,33 @@
+<odoo>
+    <record id="view_tech_repair_device_category_list" model="ir.ui.view">
+        <field name="name">tech.repair.device.category.list</field>
+        <field name="model">tech.repair.device.category</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tech_repair_device_brand_list" model="ir.ui.view">
+        <field name="name">tech.repair.device.brand.list</field>
+        <field name="model">tech.repair.device.brand</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="category_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tech_repair_device_model_list" model="ir.ui.view">
+        <field name="name">tech.repair.device.model.list</field>
+        <field name="model">tech.repair.device.model</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="brand_id"/>
+            </list>
+        </field>
+    </record>
+</odoo>

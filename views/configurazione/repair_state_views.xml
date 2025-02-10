@@ -1,0 +1,41 @@
+<!-- Interfaccia gestione stati -->
+<odoo>
+    <record id="view_tech_repair_state_form" model="ir.ui.view">
+        <field name="name">tech.repair.state.form</field>
+        <field name="model">tech.repair.state</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="sequence"/>
+                        <field name="is_closed"/>
+                        <field name="is_external_lab"/>
+                        <field name="public_state_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tech_repair_state_list" model="ir.ui.view">
+        <field name="name">tech.repair.state.list</field>
+        <field name="model">tech.repair.state</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="sequence"/>
+                <field name="is_closed"/>
+                <field name="is_external_lab"/>
+                <field name="public_state_id"/>
+            </list>
+        </field>
+    </record>
+  
+    <record id="action_tech_repair_state" model="ir.actions.act_window">
+        <field name="name">Stati Riparazione</field>
+        <field name="res_model">tech.repair.state</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,36 @@
+<odoo>
+    <record id="view_tech_repair_informativa_form" model="ir.ui.view">
+        <field name="name">tech.repair.term.form</field>
+        <field name="model">tech.repair.term</field>
+        <field name="arch" type="xml">
+            <form string="Informativa Riparazioni">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="contenuto"/>
+                        <field name="predefinita"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tech_repair_term_list" model="ir.ui.view">
+        <field name="name">tech.repair.term.list</field>
+        <field name="model">tech.repair.term</field>
+        <field name="arch" type="xml">
+            <list string="Informative Riparazioni">
+                <field name="name"/>
+                <field name="predefinita"/>
+            </list>
+        </field>
+    </record>
+
+
+    <record id="action_tech_repair_term" model="ir.actions.act_window">
+        <field name="name">Informative Riparazioni</field>
+        <field name="res_model">tech.repair.term</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,13 @@
+# Escludere cartelle di cache e compilazione
+__pycache__/
+*.pyc
+*.pyo
+
+# Escludere file temporanei
+*.swp
+*.swo
+.DS_Store
+
+# Escludere configurazioni di editor (VSCode, PyCharm)
+.vscode/
+.idea/

@@ -1,0 +1,208 @@
+<odoo>
+    <!-- Categorie di dispositivi -->
+    <record id="category_smartphone" model="tech.repair.device.category">
+        <field name="name">Smartphone</field>
+    </record>
+    <record id="category_tablet" model="tech.repair.device.category">
+        <field name="name">Tablet</field>
+    </record>
+    <record id="category_notebook" model="tech.repair.device.category">
+        <field name="name">Notebook</field>
+    </record>
+    <record id="category_tower" model="tech.repair.device.category">
+        <field name="name">PC Fisso</field>
+    </record>
+    <record id="category_camera" model="tech.repair.device.category">
+        <field name="name">Fotocamera</field>
+    </record>
+    <record id="category_hdd" model="tech.repair.device.category">
+        <field name="name">Hard Disk</field>
+    </record>
+    <record id="category_pdrive" model="tech.repair.device.category">
+        <field name="name">PenDrive</field>
+    </record>
+    <record id="category_printer" model="tech.repair.device.category">
+        <field name="name">Stampante</field>
+    </record>
+    <record id="category_sd" model="tech.repair.device.category">
+        <field name="name">Scheda SD</field>
+    </record>
+    <record id="category_watch" model="tech.repair.device.category">
+        <field name="name">Watch</field>
+    </record>
+    <record id="category_console" model="tech.repair.device.category">
+        <field name="name">Console</field>
+    </record>
+
+
+
+    <!-- ********* Marche *********** -->
+    
+    <!-- Apple -->
+    <record id="brand_apple" model="tech.repair.device.brand">
+        <field name="name">Apple</field>
+        <field name="category_id" ref="category_notebook"/>
+    </record>
+
+    <record id="brand_apple" model="tech.repair.device.brand">
+        <field name="name">Apple</field>
+        <field name="category_id" ref="category_smartphone"/>
+    </record>
+
+    <!-- Samsung -->
+    <record id="brand_samsung" model="tech.repair.device.brand">
+        <field name="name">Samsung</field>
+        <field name="category_id" ref="category_smartphone"/>
+    </record>
+
+    <!-- Dell -->
+    <record id="brand_dell" model="tech.repair.device.brand">
+        <field name="name">Dell</field>
+        <field name="category_id" ref="category_notebook"/>
+    </record>
+
+    <!-- HP -->
+    <record id="brand_hp" model="tech.repair.device.brand">
+        <field name="name">HP</field>
+        <field name="category_id" ref="category_notebook"/>
+    </record>
+
+    <!-- Lenovo -->
+    <record id="brand_lenovo" model="tech.repair.device.brand">
+        <field name="name">Lenovo</field>
+        <field name="category_id" ref="category_notebook"/>
+    </record>
+
+    <!-- Asus -->
+    <record id="brand_asus" model="tech.repair.device.brand">
+        <field name="name">Asus</field>
+        <field name="category_id" ref="category_notebook"/>
+    </record>
+
+    <!-- Acer -->
+    <record id="brand_acer" model="tech.repair.device.brand">
+        <field name="name">Acer</field>
+        <field name="category_id" ref="category_notebook"/>
+    </record>
+
+    <!-- Sony -->
+    <record id="brand_sony" model="tech.repair.device.brand">
+        <field name="name">Sony</field>
+        <field name="category_id" ref="category_notebook"/>
+    </record>
+
+    <!-- Microsoft -->
+    <record id="brand_microsoft" model="tech.repair.device.brand">
+        <field name="name">Microsoft</field>
+        <field name="category_id" ref="category_notebook"/>
+    </record>
+
+    <!-- Xiaomi -->
+    <record id="brand_xiaomi" model="tech.repair.device.brand">
+        <field name="name">Xiaomi</field>
+        <field name="category_id" ref="category_notebook"/>
+    </record>
+
+    <!-- LG -->
+    <record id="brand_lg" model="tech.repair.device.brand">
+        <field name="name">LG</field>
+        <field name="category_id" ref="category_notebook"/>
+    </record>
+
+    <!-- Huawei -->
+    <record id="brand_huawei" model="tech.repair.device.brand">
+        <field name="name">Huawei</field>
+        <field name="category_id" ref="category_notebook"/>
+    </record>
+
+    <!-- Google -->
+    <record id="brand_google" model="tech.repair.device.brand">
+        <field name="name">Google</field>
+        <field name="category_id" ref="category_smartphone"/>
+    </record>
+
+
+
+
+
+<!-- ********* Modelli *********** -->
+
+    <!-- Apple Notebook -->
+    <record id="model_macbook_air" model="tech.repair.device.model">
+        <field name="name">MacBook Air</field>
+        <field name="brand_id" ref="brand_apple"/>
+    </record>
+    <record id="model_macbook_pro" model="tech.repair.device.model">
+        <field name="name">MacBook Pro</field>
+        <field name="brand_id" ref="brand_apple"/>
+    </record>
+
+    <!-- Apple Smartphone -->
+    <record id="model_iphone_13" model="tech.repair.device.model">
+        <field name="name">iPhone 13</field>
+        <field name="brand_id" ref="brand_apple"/> 
+    </record>
+    <record id="model_iphone_14" model="tech.repair.device.model">
+        <field name="name">iPhone 14</field>
+        <field name="brand_id" ref="brand_apple"/>
+    </record>
+    <record id="model_iphone_15" model="tech.repair.device.model">
+        <field name="name">iPhone 15</field>
+        <field name="brand_id" ref="brand_apple"/>
+    </record>
+    <record id="model_iphone_16" model="tech.repair.device.model">
+        <field name="name">iPhone 16</field>
+        <field name="brand_id" ref="brand_apple"/>
+    </record>
+
+
+
+
+
+
+    <!-- Samsung Smartphone -->
+    <record id="model_galaxy_s21" model="tech.repair.device.model">
+        <field name="name">Galaxy S21</field>
+        <field name="brand_id" ref="brand_samsung"/>
+    </record>
+    <record id="model_galaxy_s22" model="tech.repair.device.model">
+        <field name="name">Galaxy S22</field>
+        <field name="brand_id" ref="brand_samsung"/>
+    </record>
+
+
+
+
+    <!-- Dell Notebook -->
+    <record id="model_dell_xps_15" model="tech.repair.device.model">
+        <field name="name">XPS 15</field>
+        <field name="brand_id" ref="brand_dell"/>
+    </record>
+
+
+    <!-- HP Notebook -->
+    <record id="model_hp_spectre" model="tech.repair.device.model">
+        <field name="name">Spectre x360</field>
+        <field name="brand_id" ref="brand_hp"/>
+    </record>
+
+
+    <!-- Lenovo Notebook -->
+    <record id="model_lenovo_thinkpad" model="tech.repair.device.model">
+        <field name="name">ThinkPad X1 Carbon</field>
+        <field name="brand_id" ref="brand_lenovo"/>
+    </record>
+
+    <!-- Sony Console -->
+    <record id="model_ps5" model="tech.repair.device.model">
+        <field name="name">PlayStation 5</field>
+        <field name="brand_id" ref="brand_sony"/>
+    </record>
+
+    <!-- Microsoft Console -->
+    <record id="model_xbox_series_x" model="tech.repair.device.model">
+        <field name="name">Xbox Series X</field>
+        <field name="brand_id" ref="brand_microsoft"/>
+    </record>
+
+</odoo>

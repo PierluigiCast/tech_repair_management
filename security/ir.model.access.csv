@@ -1,0 +1,17 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_tech_repair_order,access.tech.repair.order,model_tech_repair_order,,1,1,1,1
+access_tech_repair_loaner_device,access.tech.repair.loaner.device,model_tech_repair_loaner_device,,1,1,1,1
+access_tech_repair_state,access.tech.repair.state,model_tech_repair_state,,1,1,1,1
+access_tech_repair_category,access.tech.repair.category,model_tech_repair_category,,1,1,1,1
+access_tech_repair_brand,access.tech.repair.brand,model_tech_repair_brand,,1,1,1,1
+access_tech_repair_model,access.tech.repair.model,model_tech_repair_model,,1,1,1,1
+access_tech_repair_device_category_user,access.tech.repair.device.category,model_tech_repair_device_category,,1,1,1,1
+access_tech_repair_device_brand_user,access.tech.repair.device.brand,model_tech_repair_device_brand,,1,1,1,1
+access_tech_repair_device_model_user,access.tech.repair.device.model,model_tech_repair_device_model,,1,1,1,1
+access_tech_repair_external_lab,access.tech.repair.external.lab,model_tech_repair_external_lab,,1,1,1,1
+access_tech_repair_credential,access.tech.repair.credential,model_tech_repair_credential,,1,1,1,1
+access_tech_repair_accessory,access.tech.repair.accessory,model_tech_repair_accessory,,1,1,1,1
+access_tech_repair_state_public,access.tech.repair.state.public,model_tech_repair_state_public,,1,1,1,1
+access_tech_repair_chat_message,access.tech.repair.chat.message,model_tech_repair_chat_message,,1,1,1,1
+access_tech_repair_device_color,access.tech.repair.device.color,model_tech_repair_device_color,,1,1,1,1
+access_tech_repair_term,access.tech.repair.term,model_tech_repair_term,,1,1,1,1

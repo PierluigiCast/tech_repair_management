@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <template id="tech_repair_status_page" name="Stato Riparazione">
+        <t t-call="website.layout">
+            <div class="container">
+                <h1 class="text-center mt-4">Chat con il Tecnico</h1>
+
+                <t t-if="repair">
+                    <div class="card p-4 mt-3">
+                        <h3>Numero Riparazione: <t t-esc="tech.repair.name"/></h3>
+                        <p><strong>Stato Attuale:</strong> <t t-esc="customer_state"/></p>
+                    </div>
+
+                    <!-- AREA CHAT -->
+                    <div class="card p-4 mt-3">
+                        <h4>Chat con il Tecnico</h4>
+                        <div class="chat-box" style="max-height: 300px; overflow-y: scroll; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                            <t t-foreach="chat_messages" t-as="chat">
+                                <t t-set="is_customer" t-value="chat.sender == 'customer'"/>
+                                <t t-set="is_technician" t-value="chat.sender == 'technician'"/>
+
+                                <div t-if="is_customer" class="alert alert-primary">
+                                    <strong>Cliente:</strong> <t t-esc="chat.message"/>
+                                </div>
+                                <div t-if="is_technician" class="alert alert-secondary">
+                                    <strong>Tecnico:</strong> <t t-esc="chat.message"/>
+                                </div>
+                            </t>
+                        </div>
+
+                        <!-- Form per inviare messaggi -->
+                        <form action="/riparazionicliente/send_message" method="post" style="padding: 10px;">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" name="tech_repair_id" t-att-value="tech.repair.id"/>
+                            <textarea name="customer_message" class="form-control" rows="2" placeholder="Scrivi un messaggio..." t-att-required="1"></textarea>
+                            <button type="submit" class="btn btn-primary mt-2">Invia</button>
+                        </form>
+                    </div>
+                </t>
+                <t t-else="">
+                    <div class="alert alert-danger mt-3">Riparazione non trovata.</div>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

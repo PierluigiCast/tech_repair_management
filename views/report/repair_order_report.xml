@@ -1,0 +1,163 @@
+<!-- views/repair_order_report.xml -->
+<odoo>
+
+    <record id="paperformat_repair_order" model="report.paperformat">
+        <field name="name">Repair Order Format</field>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">20</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line">False</field>
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="action_report_repair_order" model="ir.actions.report">
+        <field name="name">Repair Order Report</field>
+        <field name="model">tech.repair.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="print_report_name">'Riparazione_' + object.name</field>
+        <field name="report_name">tech_repair_management.repair_order_report_template</field>
+        <field name="paperformat_id" ref="paperformat_repair_order"/>
+        <field name="binding_model_id" ref="model_tech_repair_order"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    
+
+   <!-- <template id="repair_order_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <h2 style="text-align: center;">Rapporto di Riparazione</h2>
+                        <p><strong>Numero Riparazione:</strong> <span t-field="o.name"/></p>
+                       
+                        <t t-if="o.qr_code_url">
+                            <img t-att-src="o.qr_code_url" style="width:150px; height:150px;"/>
+                        </t>
+                        <t t-if="o.qr_code_int_url">
+                            <img t-att-src="o.qr_code_int_url" style="width:150px; height:150px;"/>
+                        </t>
+                        <p><strong>Cliente:</strong> <span t-field="o.customer_id.display_name"/></p>
+                        <p><strong>Categoria:</strong> <span t-field="o.category_id.name"/></p>
+                        <p><strong>Marca:</strong> <span t-field="o.brand_id.name"/></p>
+                        <p><strong>Modello:</strong> <span t-field="o.model_id.name"/></p>
+                        <p><strong>Problema dichiarato:</strong> <span t-field="o.problem_description"/></p>
+                        <p><strong>Operazioni Svolte:</strong> <span t-field="o.operations"/></p>
+                        <p><strong>Costo Riparazioni:</strong> <span t-field="o.tech_repair_cost"/></p>
+                        <p><strong>Acconto:</strong> <span t-field="o.advance_payment"/></p>
+                        <p><strong>Totale:</strong> <span t-field="o.expected_total"/></p>
+                        <p><strong>Firma del cliente:</strong></p>
+                        <t t-if="o.signature_url">
+                            <img t-att-src="o.signature_url" style="width:200px; height:100px;"/>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template> -->
+
+    <template id="repair_order_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <h2 style="text-align: center;">Rapporto di Riparazione</h2>
+
+                        <!-- QR Codes -->
+                        <table style="width:100%; text-align:center; margin-bottom:20px;">
+                            <tr>
+                                <td>
+                                    <t t-if="o.qr_code_url">
+                                        <img t-att-src="o.qr_code_url" style="width:150px; height:150px;"/>
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="o.qr_code_int_url">
+                                        <img t-att-src="o.qr_code_int_url" style="width:150px; height:150px;"/>
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>QR Code Cliente</strong></td>
+                                <td><strong>QR Code Interno</strong></td>
+                            </tr>
+                        </table>
+
+                        <!-- Tabella con i dettagli della riparazione -->
+                        <table style="width:100%; border-collapse: collapse;">
+                            <tr>
+                                <td style="border: 1px solid black; padding: 8px;"><strong>Numero Riparazione:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;"><span t-field="o.name"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; padding: 8px;"><strong>Cliente:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;"><span t-field="o.customer_id.display_name"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; padding: 8px;"><strong>Categoria:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;"><span t-field="o.category_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; padding: 8px;"><strong>Marca:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;"><span t-field="o.brand_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; padding: 8px;"><strong>Modello:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;"><span t-field="o.model_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; padding: 8px;"><strong>Problema dichiarato:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;"><span t-field="o.problem_description"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; padding: 8px;"><strong>Operazioni Svolte:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;"><span t-field="o.operations"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; padding: 8px;"><strong>Costo Riparazioni:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;"><span t-field="o.tech_repair_cost"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; padding: 8px;"><strong>Acconto:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;"><span t-field="o.advance_payment"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; padding: 8px;"><strong>Totale:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;"><span t-field="o.expected_total"/></td>
+                            </tr>
+                        </table>
+                        
+
+                        <!-- Firma Cliente -->
+                        <table style="width:100%; text-align:center; margin-top:20px;">
+                            <tr>
+                                <td>
+                                    <t t-if="o.term_id">
+                                        <div t-field="o.term_id.contenuto" style="font-size: 6px; line-height: 8px; text-align: justify;"/>
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Firma del Cliente</strong></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <t t-if="o.signature_url">
+                                        <img t-att-src="o.signature_url" style="width:200px; height:100px;"/>
+                                    </t>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+
+</odoo>

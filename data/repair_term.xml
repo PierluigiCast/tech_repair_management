@@ -1,0 +1,33 @@
+<odoo>
+    <record id="repair_term_default" model="tech.repair.term">
+        <field name="name">Informativa Riparazione</field>
+        <field name="contenuto">
+            <![CDATA[
+            <p><strong>ATTENZIONE: Conservare la presente nota per esercitare il ritiro del prodotto.</strong></p>
+
+            <h3>Informativa:</h3>
+            <p>Le informiamo che, effettuati i necessari controlli sul suo prodotto, sarà nostra premura contattarla e comunicarle il preventivo di spesa per la riparazione delle eventuali anomalie riscontrate non in fase di accettazione.<br/>
+
+            <strong>Qualora NON si dovesse procedere, per qualsiasi motivo alla riparazione, il costo del CHECK-UP diagnostico eseguito dai nostri tecnici professionisti è di € 20,00.</strong></br>
+
+            Si precisa che non ci riterremo responsabili per eventuali perdite di dati e/o programmi che non siano stati dichiarati da SALVARE in sede di carico del dispositivo da parte di uno dei collaboratori TECH 3.<br/>
+
+            La invitiamo inoltre, a ritirare il suo prodotto c/o la Ns. sede entro 10 giorni dalla data della nostra comunicazione.<br/>
+            <strong>Trascorso il suddetto termine, si declina da ogni responsabilità inerente il suo prodotto.</strong></p>
+
+            <p>"Il muletto, viene concesso per uso <strong>TEMPORANEO</strong> e <strong>NON CONTINUATIVO</strong> al prezzo stipulato.<br/>
+            Per qualsiasi danno e/o manomissione effettuata all'apparecchio muletto in oggetto durante il periodo concesso, sarà corrisposta una somma di denaro pari al valore del danno stesso stimato dalla TECH 3.0 Srl o qualora ritenuto irriparabile dagli stessi, sarà dovuto l'importo per l'intero valore del bene.</p>
+
+            <p><strong>Per tutti i componenti sostituiti, si garantisce una garanzia limitata di 90 giorni dalla data di sostituzione.</strong><br/>
+
+            La garanzia non riguarda eventuali vizi sopravvenuti, ad esempio, per uso improprio da parte del consumatore o di terzi.</p>
+
+            <p>Firmando questo modulo, si autorizza automaticamente il ricevente al trattamento dei dati personali inseriti. Dichiara di aver ricevuto dal Titolare del trattamento dei dati l'informativa di cui all'art.13 del D.Lgs 196/2003, circa le finalità e le modalità del trattamento dei dati personali e sensibili e, acconsente a tale trattamento e la loro comunicazione a terzi.<br/>
+            Firmando questo modulo, si accettano automaticamente tutte le condizioni presenti in questa informativa.</p>
+
+            <p>La TECH 3.0 Srl opera in conformità al nuovo Regolamento Europeo GDPR n. 679/2016. Per qualsiasi informazione a riguardo, si prega di contattarci all'indirizzo mail: info@techtre.it</p>
+            ]]>
+        </field>
+        <field name="predefinita">True</field>
+    </record>
+</odoo>

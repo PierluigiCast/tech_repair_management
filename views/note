@@ -1,0 +1,63 @@
+ <!-- <button name="action_print_report"
+                        string="Stampa"
+                        type="object"
+                        class="btn-primary"
+                        icon="fa-print"/>" -->
+                    
+                    <!-- <button name="action_set_to_in_progress" type="object" string="In Riparazione"/>
+                    <button name="action_set_to_part_to_order" type="object" string="Parti Da Ordinare"/>
+                    <button name="action_set_to_waiting_part" type="object" string="Attesa Ricambi"/>
+                    <button name="action_set_to_ext_lab" type="object" string="Inviata al Laboratorio Esterno"/>
+                    
+                    <button name="action_set_to_done" type="object" string="Completato" class="oe_highlight"/>
+                    <button name="action_set_to_not_done" type="object" string="Chiusa Non Risolta" class="oe_highlight"/> -->
+            
+ 
+ 
+ <!-- Nascondi se stato è chiuso-->
+            <!-- <xpath expr="//header/button[@name='action_set_to_done']" position="attributes">
+                <attribute name="invisible">state_id.is_closed</attribute>
+            </xpath>
+            <xpath expr="//header/button[@name='action_set_to_not_done']" position="attributes">
+                <attribute name="invisible">state_id.is_closed</attribute>
+            </xpath> -->
+
+
+             <!-- Nasconde i pulsanti se lo stato è chiuso -->
+    <record id="view_repair_order_form_mod" model="ir.ui.view">
+        <field name="name">repair.order.form.mod</field>
+        <field name="model">repair.order</field>
+        <field name="inherit_id" ref="view_repair_order_form"/>
+        <field name="arch" type="xml">
+
+           
+            
+            <!-- Nascondi il QR Code fino a quando la riparazione non è salvata -->
+            <xpath expr="//group[field[@name='qr_code']]" position="attributes">
+                <attribute name="invisible">id == False</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+
+<!-- estensione dell'interfaccia -->
+    <record id="view_repair_order_form_inherit" model="ir.ui.view">
+        <field name="name">repair.order.form.inherit</field>
+        <field name="model">repair.order</field>
+        <field name="inherit_id" ref="view_repair_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='cred_extra']" position="inside">
+                <field name="credential_ids">
+                    <tree editable="bottom">
+                        <field name="open_date"/>
+                        <field name="username"/>
+                        <field name="password"/>
+                        <field name="service_type"/>
+                        <field name="service_other" attrs="{'invisible': [('service_type', '!=', 'other')]}"/>
+                    </tree>
+                </field>
+            </xpath>
+        </field>
+    </record>   
+

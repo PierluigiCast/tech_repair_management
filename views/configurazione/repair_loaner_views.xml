@@ -1,0 +1,42 @@
+<odoo>
+    <record id="view_tech_repair_loaner_form" model="ir.ui.view">
+        <field name="name">tech.repair.loaner_device.form</field>
+        <field name="model">tech.repair.loaner_device</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="serial_number"/>
+                        <field name="aesthetic_condition"/>
+                        <field name="status"/>
+                        <field name="tech_repair_order_id" readonly="1"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tech_repair_loaner_list" model="ir.ui.view">
+        <field name="name">tech.repair.loaner_device.list</field>
+        <field name="model">tech.repair.loaner_device</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="serial_number"/>
+                <field name="aesthetic_condition"/>
+                <field name="status"/>
+                <field name="tech_repair_order_id" readonly="1"/>
+                <field name="description"/>
+            </list>
+        </field>
+    </record>
+   
+    <record id="action_tech_repair_loaner" model="ir.actions.act_window">
+        <field name="name">Dispositivi Muletto</field>
+        <field name="res_model">tech.repair.loaner_device</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

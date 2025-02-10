@@ -1,0 +1,42 @@
+<odoo>
+    <record id="view_tech_repair_order_kanban" model="ir.ui.view">
+        <field name="name">tech.repair.order.kanban</field>
+        <field name="model">tech.repair.order</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state_id" class="o_kanban_mobile" sample="0" quick_create="false">
+                <progressbar field="state_id"
+                    colors='{"draft": "info", "done": "success", "in_progress": "warning"}'/>
+                <field name="expected_total"/>
+
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex mb-2" style="justify-content: space-between;">
+                            <field name="name" class="fw-bolder fs-5" />
+                            <field name="customer_id" class="fw-bolder fs-5" />
+                        </div>
+                        <div class="d-flex mb-2" style="justify-content: space-between;">
+                            <field name="open_date" class="ms-1 text-muted fs-5"/>
+                            <field name="close_date" class="ms-1 text-muted fs-5"/>
+                        </div>
+                        <div class="d-flex text-muted">
+                                <field name="category_id"/>
+                                <field name="brand_id"/>
+                                <field name="model_id"/>
+                            </div>
+                        <footer>
+                            <div class="d-flex text-muted">
+                                <field name="problem_description"/>
+                            </div>
+                            <div>
+                                <field name="state_id"
+                                    
+                                    options="{'classes': {'draft': 'info', 'done': 'success', 'in_progress': 'warning'}}"
+                                    class="ms-auto"/>
+                            </div>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+</odoo>
