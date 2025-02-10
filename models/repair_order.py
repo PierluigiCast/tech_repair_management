@@ -446,7 +446,6 @@ class RepairOrder(models.Model):
     def _generate_qr_code(self):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
        
-        
         for record in self:
             public_url = f"{base_url}/repairstatus/{record.id}"
 
@@ -471,7 +470,6 @@ class RepairOrder(models.Model):
         # Genera un QR Code con il link diretto alla riparazione
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
        
-        
         for record in self:
             if record.name:
                 tech_repair_url = f"{base_url}/web#id={record.id}&model=tech.repair.order&view_type=form"

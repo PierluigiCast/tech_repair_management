@@ -8,7 +8,7 @@
 
                 <t t-if="repair">
                     <div class="card p-4 mt-3">
-                        <h3>Numero Riparazione: <t t-esc="tech.repair.name"/></h3>
+                        <h3>Numero Riparazione: <t t-esc="repair.name"/></h3>
                         <p><strong>Stato Attuale:</strong> <t t-esc="customer_state"/></p>
                     </div>
 
@@ -30,9 +30,9 @@
                         </div>
 
                         <!-- Form per inviare messaggi -->
-                        <form action="/riparazionicliente/send_message" method="post" style="padding: 10px;">
+                        <form action="/repairstatus/send_message" method="post" style="padding: 10px;">
                             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                            <input type="hidden" name="tech_repair_id" t-att-value="tech.repair.id"/>
+                            <input type="hidden" name="tech_repair_id" t-att-value="repair.id"/>
                             <textarea name="customer_message" class="form-control" rows="2" placeholder="Scrivi un messaggio..." t-att-required="1"></textarea>
                             <button type="submit" class="btn btn-primary mt-2">Invia</button>
                         </form>
