@@ -520,19 +520,18 @@ class RepairOrder(models.Model):
         img.save(buffer, format="PNG")
         return base64.b64encode(buffer.getvalue())
     
-
+    # Genera un URL per i QR Code e la firma sul report che non accetta l'immagine base64
     @api.depends('qr_code')
     def _compute_qr_code_url(self):
-        # Genera un URL per il QR Code
+        
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
        
         for record in self:
             if record.qr_code:
-                record.qr_code_url = f"{base_url}/web/image/{record._name}/{record.token_url}/qr_code"
+                record.qr_code_url = f"{base_url}/web/image/{record._name}/{record.id}/qr_code"
 
     @api.depends('qr_code_int')
     def _compute_qr_code_int_url(self):
-        # Genera un URL per il QR Code
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
       
         for record in self:
@@ -541,7 +540,6 @@ class RepairOrder(models.Model):
 
     @api.depends('signature')
     def _compute_signature_url(self):
-        # Genera un URL per la Firma del Cliente
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
        
         for record in self:

@@ -8,23 +8,39 @@
 
                 <t t-if="repair">
                     <div class="card p-4 mt-3">
-                        <h3>Numero Riparazione: <t t-esc="repair.name"/></h3>
-                        <p><strong>Stato Attuale:</strong> <t t-esc="customer_state"/></p>
+                        <h4><strong>Dispositivo:</strong> <br/> <t t-esc="repair.category_id.name"/> <t t-esc="repair.model_id.name"/></h4>
+                        <table class="table table-borderless table-sm" style="border-collapse: collapse;">
+                            <tbody>
+                                <tr>
+                                    <td style="font-size:13px; padding: 5px;"><strong>Numero Riparazione: </strong><t t-esc="repair.name"/></td>
+                                    <td style="font-size:13px; padding: 5px;"><strong>Stato Attuale: </strong><t t-esc="customer_state"/></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a t-att-href="'/repairstatus/pdf/%s' % repair.token_url" class="btn btn-danger mt-3 btn-sm">
+                                            Check-In Riparazione
+                                        </a>
+                                    </td>
+                                    <td style="font-size:13px; padding: 5px;"><strong>Aperta il: </strong><t t-esc="open_date"/></td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
                     </div>
 
                     <!-- AREA CHAT -->
                     <div class="card p-4 mt-3">
                         <h4>Chat con il Tecnico</h4>
-                        <div class="chat-box" style="max-height: 300px; overflow-y: scroll; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                        <div class="chat-box" style="min-height: 200px; max-height: 300px; overflow-y: scroll; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
                             <t t-foreach="chat_messages" t-as="chat">
                                 <t t-set="is_customer" t-value="chat.sender == 'customer'"/>
                                 <t t-set="is_technician" t-value="chat.sender == 'technician'"/>
 
-                                <div t-if="is_customer" class="alert alert-primary">
-                                    <strong>Cliente:</strong> <t t-esc="chat.message"/>
+                                <div t-if="is_customer" class="alert alert-primary" style="font-size:13px;">
+                                    <strong>Cliente (<t t-esc="repair.customer_id.name"/>)</strong> <t t-esc="chat.message"/>
                                 </div>
-                                <div t-if="is_technician" class="alert alert-secondary">
-                                    <strong>Tecnico:</strong> <t t-esc="chat.message"/>
+                                <div t-if="is_technician" class="alert alert-secondary" style="font-size:13px;">
+                                    <strong>Tecnico (<t t-esc="repair.assigned_to.name"/>)</strong> <t t-esc="chat.message"/>
                                 </div>
                             </t>
                         </div>
@@ -32,7 +48,7 @@
                         <!-- Form per inviare messaggi -->
                         <form action="/repairstatus/send_message" method="post" style="padding: 10px;">
                             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                            <input type="hidden" name="tech_repair_id" t-att-value="repair.id"/>
+                            <input type="hidden" name="token" t-att-value="repair.token_url"/>
                             <textarea name="customer_message" class="form-control" rows="2" placeholder="Scrivi un messaggio..." t-att-required="1"></textarea>
                             <button type="submit" class="btn btn-primary mt-2">Invia</button>
                         </form>

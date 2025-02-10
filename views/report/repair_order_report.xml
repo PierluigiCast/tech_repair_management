@@ -25,40 +25,6 @@
         <field name="binding_type">report</field>
     </record>
 
-    
-
-   <!-- <template id="repair_order_report_template">
-        <t t-call="web.html_container">
-            <t t-call="web.basic_layout">
-                <t t-foreach="docs" t-as="o">
-                    <div class="page">
-                        <h2 style="text-align: center;">Rapporto di Riparazione</h2>
-                        <p><strong>Numero Riparazione:</strong> <span t-field="o.name"/></p>
-                       
-                        <t t-if="o.qr_code_url">
-                            <img t-att-src="o.qr_code_url" style="width:150px; height:150px;"/>
-                        </t>
-                        <t t-if="o.qr_code_int_url">
-                            <img t-att-src="o.qr_code_int_url" style="width:150px; height:150px;"/>
-                        </t>
-                        <p><strong>Cliente:</strong> <span t-field="o.customer_id.display_name"/></p>
-                        <p><strong>Categoria:</strong> <span t-field="o.category_id.name"/></p>
-                        <p><strong>Marca:</strong> <span t-field="o.brand_id.name"/></p>
-                        <p><strong>Modello:</strong> <span t-field="o.model_id.name"/></p>
-                        <p><strong>Problema dichiarato:</strong> <span t-field="o.problem_description"/></p>
-                        <p><strong>Operazioni Svolte:</strong> <span t-field="o.operations"/></p>
-                        <p><strong>Costo Riparazioni:</strong> <span t-field="o.tech_repair_cost"/></p>
-                        <p><strong>Acconto:</strong> <span t-field="o.advance_payment"/></p>
-                        <p><strong>Totale:</strong> <span t-field="o.expected_total"/></p>
-                        <p><strong>Firma del cliente:</strong></p>
-                        <t t-if="o.signature_url">
-                            <img t-att-src="o.signature_url" style="width:200px; height:100px;"/>
-                        </t>
-                    </div>
-                </t>
-            </t>
-        </t>
-    </template> -->
 
     <template id="repair_order_report_template">
         <t t-call="web.html_container">
