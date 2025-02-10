@@ -7,6 +7,7 @@ from io import BytesIO
 from odoo import models, fields, api
 from odoo.tools import config
 from odoo.exceptions import ValidationError, UserError
+from datetime import timedelta
 
 # Modello principale per la gestione delle riparazioni
 class RepairOrder(models.Model):
@@ -67,15 +68,23 @@ class RepairOrder(models.Model):
         'tech.repair.accessory',
         'tech_repair_order_id', 
         string="Accessori",
-        tracking=True
     )
+
+    # software da installare
+    software_ids = fields.Many2many(
+        'tech.repair.software',  
+        'repair_software_rel',   # Nome della tabella di relazione
+        'repair_id',             # Campo che collega a tech.repair.order
+        'software_id',           # Campo che collega a tech.repair.software
+        string='Software Installati'
+    )
+
 
 
     # Stato Fittizio per la Visualizzazione Online
     customer_state_id = fields.Many2one(
         'tech.repair.state.public', 
         string="Stato Visibile al Cliente", 
-        tracking=True
     )
 
     # Laboratorio esterno a cui può essere inviata la riparazione
@@ -441,6 +450,8 @@ class RepairOrder(models.Model):
             if record.state_id and record.state_id.is_closed:
                 if not record.close_date:
                     record.close_date = fields.Datetime.now()
+
+
                     if record.id:  # Assicuro che il record sia già salvato
                         record.message_post(body=f"Stato cambiato a '{record.state_id.name}' e chiuso il {record.close_date.strftime('%Y-%m-%d %H:%M:%S')}.", message_type="notification")
             else:
@@ -533,7 +544,8 @@ class RepairOrder(models.Model):
         for record in self:
             component_cost = sum(record.components_ids.mapped('lst_price'))  # Somma i prezzi di listino dei componenti
             lab_cost = sum(record.external_lab_ids.mapped('customer_cost'))  # Somma costi di tutti i laboratori
-            record.expected_total = (record.tech_repair_cost + lab_cost + component_cost) - record.advance_payment
+            software_cost = sum(record.software_ids.mapped('price'))  # Somma i costi dei software
+            record.expected_total = (record.tech_repair_cost + software_cost + lab_cost + component_cost) - record.advance_payment
 
     # Gestione del tasto invia messaggio al cliente online
     def action_send_message(self):

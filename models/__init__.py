@@ -12,5 +12,6 @@ from . import repair_state_public
 from . import repair_chat
 from . import repair_device_color
 from . import repair_term
+from . import repair_software
 from . import res_partner
 

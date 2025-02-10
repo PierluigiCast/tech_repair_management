@@ -66,12 +66,12 @@
 
                     <!-- Gestione TABS-->
                     <notebook>
-						<page string="Operazioni" name="desc_op">
+						<page string="Operazioni" name="desc_op" class="fixed-height-page">
                             <group>
                                 <field name="operations" widget="html"/>  <!-- Operazioni Svolte -->
                             </group>
 						</page>
-                        <page string="Credenziali" name="cred_extra">
+                        <page string="Credenziali" name="cred_extra" class="fixed-height-page">
                             <group>
                                 <field name="credential_ids" string=" ">
                                     <list editable="bottom">
@@ -84,7 +84,7 @@
                                 </field>
                             </group>
                         </page>
-                        <page string="Accessori" name="accessory">
+                        <page string="Accessori" name="accessory" class="fixed-height-page">
                             <group>
                                 <field name="accessory_ids" string=" ">
                                     <list editable="bottom">
@@ -95,12 +95,24 @@
                                 </field>
                             </group>
                         </page>
-                        <page string="Componenti Utilizzati" name="compon_used">
+                        <page string="Software Da Installare" name="software" class="fixed-height-page">
+                            <group>
+                                <field name="software_ids" string=" ">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="price"/>
+                                        <field name="renewal_required"/>
+                                        <field name="duration" invisible="renewal_required == False"/>
+                                    </list>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Componenti Utilizzati" name="compon_used" class="fixed-height-page">
                             <group>
                                 <field name="components_ids" widget="many2many_tags"/>
                             </group>
 						</page>
-                        <page string="Lab Esterno" name="ext_lab">
+                        <page string="Lab Esterno" name="ext_lab" class="fixed-height-page">
                             <field name="external_lab_ids" string=" ">
                                 <list editable="bottom">
                                     <field name="lab_id"/>
@@ -112,7 +124,7 @@
                                 </list>
                             </field>
                         </page>
-                        <page string="Chat Cliente" name="chat_customer">
+                        <page string="Chat Cliente" name="chat_customer" class="fixed-height-page">
                             <field name="chat_message_ids" string=" ">
                                 <list editable="bottom">
                                         <field name="create_date"/>

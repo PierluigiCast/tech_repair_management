@@ -1,0 +1,12 @@
+<odoo>
+    <record id="ir_cron_check_software_renewals" model="ir.cron">
+        <field name="name">Controlla Rinnovi Software</field>
+        <field name="model_id" ref="model_tech_repair_software"/>
+        <field name="state">code</field>
+        <field name="code">model.check_software_renewals()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <!-- <field name="numbercall">-1</field> -->
+        <field name="priority">5</field>
+    </record>
+</odoo>

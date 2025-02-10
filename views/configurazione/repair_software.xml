@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Lista dei software installabili -->
+    <record id="view_tech_repair_software_tree" model="ir.ui.view">
+        <field name="name">tech.repair.software.list</field>
+        <field name="model">tech.repair.software</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="price"/>
+                <field name="renewal_required"/>
+                <field name="duration" invisible="renewal_required == False"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vista Form per gestire i software -->
+    <record id="view_tech_repair_software_form" model="ir.ui.view">
+        <field name="name">tech.repair.software.form</field>
+        <field name="model">tech.repair.software</field>
+        <field name="arch" type="xml">
+            <form string="Software Installato">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="price"/>
+                        <field name="renewal_required"/>
+                        <field name="duration" invisible="renewal_required == False"/>
+                    </group>
+                </sheet>
+                <!-- <footer>
+                    <button string="Salva" type="object" name="save" class="oe_highlight"/>
+                    <button string="Annulla" class="oe_link" special="cancel"/>
+                </footer> -->
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_tech_repair_software" model="ir.actions.act_window">
+        <field name="name">Software Installati</field>
+        <field name="res_model">tech.repair.software</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
