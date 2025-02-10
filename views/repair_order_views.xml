@@ -39,6 +39,7 @@
                             <field name="customer_state_id"/>  <!-- Stato Visibile al Cliente -->
                             <field name="tech_repair_cost"/>  <!-- Costo Riparazione -->
                             <field name="advance_payment"/>  <!-- Acconto -->
+                            <field name="discount_amount"/>  <!-- Sconto -->
                             <field name="expected_total" readonly="1"/>  <!-- Totale Previsto -->
                         </group>
                     </group>

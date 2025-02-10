@@ -37,17 +37,17 @@ class RepairOrder(models.Model):
         'tech.repair.device.color',
         string="Colore",
         help="Seleziona il colore del dispositivo",
-    )
+        )
 
     aesthetic_condition = fields.Selection([
         ('new', 'Nuovo'),
         ('good', 'Buono'),
         ('used', 'Usato'),
         ('damaged', 'Danneggiato')
-    ], string='Stato Estetico', default='good')
+        ], string='Stato Estetico', default='good')
 
     # stato complessivo del dispositivo all'accettazione
-    aesthetic_state = fields.Char(string='Difetti Visivi', required=False )
+    aesthetic_state = fields.Char(string='Difetti Visivi', required=False , help="Se ci sono dei danni/graffi evidenti, scrivili qui")
 
     # seriale / IMEI e con traking registro i cambiamenti
     serial_number = fields.Char(string='Seriale / IMEI', required=False )
@@ -126,10 +126,18 @@ class RepairOrder(models.Model):
     # Stato della riparazione, gestito dinamicamente
     # Imposta lo stato automaticamente alla creazione
 
-    state_id = fields.Many2one('tech.repair.state', string='Stato', required=True, default=_default_state)
+    state_id = fields.Many2one(
+        'tech.repair.state',
+         string='Stato', 
+         required=True, 
+         default=_default_state
+        )
 
     # Descrizione del problema segnalato dal cliente
-    problem_description = fields.Text(string='Descrizione Problema')
+    problem_description = fields.Text(
+        string='Descrizione Problema',
+        help="Problema dichiarato dal cliente"
+        )
 
     # Operazioni svolte dal tecnico
     # operations = fields.Text(string='Operazioni Svolte')
@@ -139,14 +147,24 @@ class RepairOrder(models.Model):
         sanitize=False,  # Permette HTML senza restrizioni (può essere utile se vuoi pulsanti o formattazione speciale)
         sanitize_attributes=False,
         help="Inserisci le operazioni e usa '/' per i comandi."
-    )
+        )
 
     # Costo della riparazione
-    tech_repair_cost = fields.Float(string='Costo Riparazione', default=0.0)
+    tech_repair_cost = fields.Float(string='Costo Riparazione €', default=0.0)
     # Acconto versato dal cliente
-    advance_payment = fields.Float(string='Acconto', default=0.0)
+    advance_payment = fields.Float(
+        string='Acconto €', 
+        default=0.0,
+        help="Acconto"
+        )
+    # Sconto
+    discount_amount = fields.Float(
+        string="Sconto €",
+        help="Importo dello sconto da applicare al totale."
+    )
+
     # Calcolo automatico del totale previsto
-    expected_total = fields.Float(string='Totale Previsto', compute='_compute_expected_total')
+    expected_total = fields.Float(string='Totale Previsto €', compute='_compute_expected_total')
     # Componenti usati per la riparazione, presi dal magazzino
     components_ids = fields.Many2many('product.product', string='Componenti Usati')
 
@@ -475,49 +493,32 @@ class RepairOrder(models.Model):
     @api.depends('name')
     def _generate_qr_code(self):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-       
         for record in self:
-            public_url = f"{base_url}/repairstatus/{record.token_url}"
-
-            qr = qrcode.QRCode(
-                version=1,
-                error_correction=qrcode.constants.ERROR_CORRECT_L,
-                box_size=10,
-                border=4
-            )
-            qr.add_data(public_url)
-            qr.make(fit=True)
-
-            img = qr.make_image(fill='black', back_color='white')
-            buffer = BytesIO()
-            img.save(buffer, format="PNG")
-            qr_image = base64.b64encode(buffer.getvalue())
-            record.qr_code = qr_image
+            record.qr_code = self._generate_qr_code_for_url(f"{base_url}/repairstatus/{record.token_url}")
             
 
     @api.depends('name')
     def _generate_qr_code_int(self):
         # Genera un QR Code con il link diretto alla riparazione
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-       
         for record in self:
-            if record.name:
-                tech_repair_url = f"{base_url}/web#id={record.id}&model=tech.repair.order&view_type=form"
+            record.qr_code_int = self._generate_qr_code_for_url(f"{base_url}/web#id={record.id}&model=tech.repair.order&view_type=form")
+    
+    # Genera un QR Code per un URL dato
+    def _generate_qr_code_for_url(self, url):
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4
+        )
+        qr.add_data(url)
+        qr.make(fit=True)
 
-                qr2 = qrcode.QRCode(
-                    version=1,
-                    error_correction=qrcode.constants.ERROR_CORRECT_L,
-                    box_size=10,
-                    border=4
-                )
-                qr2.add_data(tech_repair_url)  # Inseriamo il link completo alla riparazione
-                qr2.make(fit=True)
-
-                img = qr2.make_image(fill='black', back_color='white')
-                buffer = BytesIO()
-                img.save(buffer, format="PNG")
-                qr_image_int = base64.b64encode(buffer.getvalue())
-                record.qr_code_int = qr_image_int
+        img = qr.make_image(fill='black', back_color='white')
+        buffer = BytesIO()
+        img.save(buffer, format="PNG")
+        return base64.b64encode(buffer.getvalue())
     
 
     @api.depends('qr_code')
@@ -549,13 +550,13 @@ class RepairOrder(models.Model):
 
 
     # Metodo per calcolare il totale previsto sottraendo l'acconto
-    @api.depends('tech_repair_cost', 'advance_payment', 'components_ids', 'external_lab_ids.customer_cost')
+    @api.depends('tech_repair_cost', 'advance_payment', 'components_ids', 'external_lab_ids.customer_cost', 'discount_amount')
     def _compute_expected_total(self):
         for record in self:
             component_cost = sum(record.components_ids.mapped('lst_price'))  # Somma i prezzi di listino dei componenti
             lab_cost = sum(record.external_lab_ids.mapped('customer_cost'))  # Somma costi di tutti i laboratori
             software_cost = sum(record.software_ids.mapped('price'))  # Somma i costi dei software
-            record.expected_total = (record.tech_repair_cost + software_cost + lab_cost + component_cost) - record.advance_payment
+            record.expected_total = (record.tech_repair_cost + software_cost + lab_cost + component_cost) - record.advance_payment - record.discount_amount
 
 
     # Calcola la scadenza della commessa in base al software con durata maggiore
@@ -573,7 +574,7 @@ class RepairOrder(models.Model):
     @api.model
     def check_repair_renewals(self):
         today = fields.Date.today()
-        renewal_alert_date = today + timedelta(days=1)  # 1 mese prima della scadenza (impostato a 1 per test)
+        renewal_alert_date = today + timedelta(days=30)  # 1 mese prima della scadenza
 
         # Trova le commesse con scadenza tra 30 giorni
         orders_to_renew = self.search([
@@ -589,14 +590,7 @@ class RepairOrder(models.Model):
                 mail_template.send_mail(order.customer_id.id, force_send=True)
 
             # Crea un'opportunità CRM per il rinnovo della commessa
-            self.env['crm.lead'].create({
-                'name': f"Rinnovo Commessa {order.name}",
-                'partner_id': order.customer_id.id,
-                'type': 'opportunity',
-                'description': f"Rinnovo della commessa {order.name} per {order.customer_id.name}. Scadenza: {order.renewal_date}",
-                'expected_revenue': sum(order.software_ids.mapped('price')),
-                'probability': 50,
-            })
+            self.crm_lead_creation(order)
 
     # Forza l'invio dell'email di rinnovo al cliente
     def action_force_send_renewal_email(self):
@@ -613,7 +607,7 @@ class RepairOrder(models.Model):
 
                 email_values = {
                     'email_to': record.customer_id.email,
-                    'email_from': record.company_id.email or '',
+                    'email_from': f"{record.company_id.name} <{record.company_id.email or ''}>", # se vuoto, imposta quello configurato
                     'body_html': mail_template.body_html.replace('${object.customer_id.name}', record.customer_id.name).replace('${object.renewal_date}', str(record.renewal_date)),
                 }
                 
@@ -623,6 +617,43 @@ class RepairOrder(models.Model):
                     body=f"⚡ Email di rinnovo inviata manualmente a {record.customer_id.email}.",
                     message_type="comment"
                 )
+
+                self.crm_lead_creation(record)
+
+                
+
+    def crm_lead_creation(self, record):
+        crm_lead = self.env['crm.lead']
+        crm_tag = self.env['crm.tag']
+
+        # Cerca se esiste già l'etichetta "Rinnovi"
+        renewal_tag = crm_tag.search([('name', '=', 'Rinnovi')], limit=1)
+
+        # Se l'etichetta non esiste, la crea
+        if not renewal_tag:
+            renewal_tag = crm_tag.create({'name': 'Rinnovi'})
+        
+        self.env['crm.lead'].create({
+                    'name': f"Rinnovo Software - {record.customer_id.name}",
+                    'partner_id': record.customer_id.id,
+                    'type': 'opportunity',
+                    'tag_ids': [(4, renewal_tag.id)],  # Assegna l'etichetta "Rinnovi"
+                    'description': f"""
+                        <p>Rinnovo software della commessa 
+                        <strong><a href="{self.env['ir.config_parameter'].sudo().get_param('web.base.url')}/web#id={record.id}&model=tech.repair.order&view_type=form">{record.name}</a></strong> 
+                        per <strong>{record.customer_id.name}</strong>.</p>
+                        <p><strong>Scadenza:</strong> {record.renewal_date.strftime('%d/%m/%Y') if record.renewal_date else 'Data non disponibile'}</p>
+                        <p><strong>Contatto:</strong> {record.customer_id.mobile or 'Non disponibile'}</p>
+                        <p><strong>Mail:</strong> {record.customer_id.email or 'Non disponibile'}</p>
+                        <p><strong>Software da rinnovare:</strong></p>
+                        <ul>
+                            {"".join([f"<li>{software.name} - €{software.price:.2f}</li>" for software in record.software_ids])}
+                        </ul>
+                    """,
+                    'expected_revenue': sum(record.software_ids.mapped('price')),
+                    'probability': 50,
+                })
+
 
     # Gestione del tasto invia messaggio al cliente online
     def action_send_message(self):
