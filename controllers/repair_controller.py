@@ -7,24 +7,26 @@ class RepairController(http.Controller):
 
     _logger = logging.getLogger(__name__)
 
-    @http.route('/repairstatus/<int:tech_repair_id>', type='http', auth="public", website=True)
-    def tech_repair_status(self, tech_repair_id, **kwargs):
+    @http.route('/repairstatus/<string:token>', type='http', auth="public", website=True)
+    def tech_repair_status(self, token, **kwargs):
         # Forzo Odoo a usare un db
         db_name = request.httprequest.args.get('db')
         if db_name:
             request.session.db = db_name
-        tech_repair_order = request.env['tech.repair.order'].sudo().browse(tech_repair_id)
+            
+        tech_repair_order = request.env['tech.repair.order'].sudo().search([('token_url', '=', token)], limit=1)
+
 
         if not tech_repair_order.exists():
             return request.render('tech_repair_management.tech_repair_not_found', {})
 
         # Filtra solo i messaggi destinati al cliente
         chat_messages = request.env['tech.repair.chat.message'].sudo().search([
-            ('tech_repair_order_id', '=', tech_repair_id),
+            ('tech_repair_order_id.token_url', '=', token)
         ], order='create_date asc')
 
         # Log per debug
-        self._logger.info("Messaggi trovati per la riparazione %s: %s", tech_repair_id, chat_messages)
+        self._logger.info("Messaggi trovati per la riparazione %s: %s", token, chat_messages)
 
 
         return request.render('tech_repair_management.tech_repair_status_page', {
@@ -35,11 +37,11 @@ class RepairController(http.Controller):
 
     @http.route('/repairstatus/send_message', type='http', auth="public", methods=['POST'], website=True)
     def send_message(self, **post):
-        tech_repair_id = post.get('tech_repair_id')
+        token = post.get('token')
         customer_message = post.get('customer_message')  # 🛠️ Nome corretto del campo dal form
 
-        if tech_repair_id and customer_message:
-            tech_repair_order = request.env['tech.repair.order'].sudo().browse(int(tech_repair_id))
+        if token and customer_message:
+            tech_repair_order = request.env['tech.repair.order'].sudo().search([('token_url', '=', token)], limit=1)
             if tech_repair_order.exists():
                 # Salvo il messaggio nella tabella `tech.repair.chat.message`
                 request.env['tech.repair.chat.message'].sudo().create({
@@ -56,8 +58,8 @@ class RepairController(http.Controller):
                     body_is_html=True  # Permette la formattazione HTML
                 )
 
-                self._logger.info("Messaggio ricevuto dal cliente per riparazione %s: %s", tech_repair_id, customer_message)
+                self._logger.info("Messaggio ricevuto dal cliente per riparazione %s: %s", token, customer_message)
 
-        return request.redirect(f'/repairstatus/{tech_repair_id}')
+        return request.redirect(f'/repairstatus/{token}')
     
 

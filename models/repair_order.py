@@ -2,6 +2,7 @@ import logging
 import base64
 import qrcode
 import os
+import uuid
 from io import BytesIO
 from odoo import models, fields, api
 from odoo.tools import config
@@ -17,6 +18,10 @@ class RepairOrder(models.Model):
     
     # Numero univoco della riparazione, generato automaticamente
     name = fields.Char(string='Numero Riparazione', required=True, copy=False, default=lambda self: self._generate_sequence())
+
+    # Token
+    token_url = fields.Char(string='Token URL', copy=False, readonly=True)
+
 
     # Cliente associato alla riparazione
     customer_id = fields.Many2one('res.partner', string='Cliente', required=True, context={'from_tech_repair_order': True})
@@ -220,6 +225,10 @@ class RepairOrder(models.Model):
             # Se il campo 'name' non è presente nei valori, generiamo un numero di riparazione automatico
             if 'name' not in vals or not vals['name']:
                 vals['name'] = self.env['ir.sequence'].next_by_code('tech.repair.order') or 'New'
+
+            # Genera il token univoco per la riparazione
+            if 'token_url' not in vals:
+                vals['token_url'] = str(uuid.uuid4())  # Genera un token casuale
 
             # Imposta l'utente che crea la riparazione come assegnatario di default
             if 'assigned_to' not in vals:
@@ -447,7 +456,7 @@ class RepairOrder(models.Model):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
        
         for record in self:
-            public_url = f"{base_url}/repairstatus/{record.id}"
+            public_url = f"{base_url}/repairstatus/{record.token_url}"
 
             qr = qrcode.QRCode(
                 version=1,
@@ -497,7 +506,7 @@ class RepairOrder(models.Model):
        
         for record in self:
             if record.qr_code:
-                record.qr_code_url = f"{base_url}/web/image/{record._name}/{record.id}/qr_code"
+                record.qr_code_url = f"{base_url}/web/image/{record._name}/{record.token_url}/qr_code"
 
     @api.depends('qr_code_int')
     def _compute_qr_code_int_url(self):
