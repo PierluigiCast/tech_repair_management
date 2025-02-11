@@ -290,12 +290,12 @@ class RepairOrder(models.Model):
         
 
     def write(self, vals):
-        # Registra la data dell'ultima modifica e logga le modifiche nel Chatter
+        # Registra la data dell'ultima modifica
         if 'last_modified_date' not in vals:  # Evita un loop infinito aggiornando solo se non è già presente
             vals['last_modified_date'] = fields.Datetime.now()
 
-        # Lista dei campi da ammettere per escludere il tracciamento doppio
-        excluded_fields = ['signature']  # Variabile per i campi da escludere
+        # Lista dei campi da escludere al tracciamento
+        excluded_fields = ['signature','last_modified_date']  # Variabile per i campi da escludere
 
         # Ottiene le etichette leggibili dei campi
         field_labels = self.fields_get()
@@ -309,6 +309,8 @@ class RepairOrder(models.Model):
             old_loaner = record.loaner_device_id  # Salvo il muletto precedente
             old_credentials = record.credential_ids  # Salvo le credenziali precedenti
             old_accessories = {acc.id: acc.name for acc in record.accessory_ids} # Salvo gli accessori prima della modifica
+            old_components = record.components_ids # Salvo i componenti prima della mod
+            old_software = record.software_ids # Salvo i software prima della mod
             
 
         res = super(RepairOrder, self).write(vals)  # Salvo prima le modifiche senza causare ricorsione
@@ -419,6 +421,43 @@ class RepairOrder(models.Model):
                         if old_cred.service_other != cred.service_other and cred.service_type == 'other':
                             changed_fields.append(f"Modificato Servizio Altro: <strong>{old_cred.service_other} ➝ {cred.service_other}</strong>")
 
+
+            # Controllo modifiche componenti
+            if 'components_ids' in vals:
+                new_components = record.components_ids
+                added_components = new_components - old_components
+                removed_components = old_components - new_components
+
+                if added_components:
+                    # Recuperiamo i nomi (o qualsiasi info desideri) dal record product.product
+                    added_names = [c.display_name for c in added_components]
+                    changed_fields.append(
+                        f"Aggiunti componenti: <strong>{', '.join(added_names)}</strong>"
+                    )
+
+                if removed_components:
+                    removed_names = [c.display_name for c in removed_components]
+                    changed_fields.append(
+                        f"Rimossi componenti: <strong>{', '.join(removed_names)}</strong>"
+                    )
+
+            # Controllo modifiche software
+            if 'software_ids' in vals:
+                new_software = record.software_ids
+                added_software = new_software - old_software
+                removed_software = old_software - new_software
+
+                if added_software:
+                    added_names = [s.display_name for s in added_software]
+                    changed_fields.append(
+                        f"Aggiunti software: <strong>{', '.join(added_names)}</strong>"
+                    )
+
+                if removed_software:
+                    removed_names = [s.display_name for s in removed_software]
+                    changed_fields.append(
+                        f"Rimossi software: <strong>{', '.join(removed_names)}</strong>"
+                    )
 
             # Se ci sono modifiche, registro il messaggio nel Chatter
             if changed_fields:
