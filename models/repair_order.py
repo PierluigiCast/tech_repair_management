@@ -207,6 +207,8 @@ class RepairOrder(models.Model):
 
     # Firma digitale del cliente per la conferma della riparazione
     signature = fields.Binary(string='Firma Cliente')
+    signature_locked = fields.Boolean(string="Firma Bloccata", default=True)
+
     signature_url = fields.Char("Firma Cliente URL", compute="_compute_signature_url", store=True)
 
     # Trova l'informativa predefinita
@@ -335,6 +337,10 @@ class RepairOrder(models.Model):
                 if old_value != new_value:
                     field_name = field_labels[field]['string'] if field in field_labels else field
                     changed_fields.append(f"<strong>{field_name}</strong>: {old_value} ➝ <strong>{new_value}</strong>")
+            
+            # Blocco la firma dopo la modifica
+            if 'signature' in vals:
+                self.write({'signature_locked': True})  
 
             # Tracciamento modifiche accessori
             if 'accessory_ids' in vals:
@@ -702,6 +708,10 @@ class RepairOrder(models.Model):
             'order_line': [(0, 0, {'product_id': comp.id, 'price_unit': comp.lst_price}) for comp in self.components_ids]
         })
         return sale_order
+
+    # sblocca la firma
+    def action_unlock_signature(self):
+        self.write({'signature_locked': False})
     
     # Ricerca per QRCode
     @api.model

@@ -4,7 +4,7 @@
     <template id="tech_repair_status_page" name="Stato Riparazione">
         <t t-call="website.layout">
             <div class="container">
-                <h1 class="text-center mt-4">Chat con il Tecnico</h1>
+                <h4 class="text-center mt-4">Repair Status</h4>
 
                 <t t-if="repair">
                     <div class="card p-4 mt-3">

@@ -49,7 +49,8 @@
 
                     <group>
                         <group>
-                            <field name="signature" widget="signature"/> <!-- Widget della firma -->
+                            <field name="signature" widget="signature" readonly="signature_locked"/> <!-- Widget della firma -->
+                            <button name="action_unlock_signature" type="object" string="Modifica Firma" class="btn-secondary btn-sm" invisible="signature_locked == False"/>
                         </group>
                         <group name="qr_code">
                             <field name="qr_code" widget="image" class="oe_avatar"/> <!-- Sezione per il QR Code -->
