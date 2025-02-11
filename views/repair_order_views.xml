@@ -113,7 +113,15 @@
                         </page>
                         <page string="Componenti Utilizzati" name="compon_used" class="fixed-height-page">
                             <group>
-                                <field name="components_ids" widget="many2many_tags"/>
+                                <field name="components_ids" string=" ">
+                                    <list editable="bottom">
+                                        <field name="name"/>
+                                        <field name="supplier_id"/>
+                                        <field name="purchase_date"/>
+                                        <field name="receipt_date"/>
+                                        <field name="serial_number"/>
+                                    </list>
+                                </field>
                             </group>
 						</page>
                         <page string="Lab Esterno" name="ext_lab" class="fixed-height-page">

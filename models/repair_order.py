@@ -197,8 +197,8 @@ class RepairOrder(models.Model):
 
 
     chat_message_ids = fields.One2many(
-        'tech.repair.chat.message', 
-        'tech_repair_order_id', 
+        'tech.repair.chat.message',
+        'tech_repair_order_id',
         string="Messaggi Chat"
     )
 
@@ -302,7 +302,8 @@ class RepairOrder(models.Model):
 
         for record in self:
             old_values = {
-                field: record[field] for field in vals.keys() 
+                field: record[field] 
+                for field in vals.keys() 
                 if field in record and field not in excluded_fields  # Escludiamo alcuni campi
             }
             old_loaner = record.loaner_device_id  # Salvo il muletto precedente
@@ -319,8 +320,8 @@ class RepairOrder(models.Model):
             for field, old_value in old_values.items():
                 new_value = record[field]
 
-                # Evito il problema del False ➝ xxxx eliminando One2many e Many2one
-                if isinstance(record._fields[field], fields.One2many) or isinstance(record._fields[field], fields.Many2one):
+                # Evito il problema del False ➝ xxxx eliminando One2many / Many2one / Many2many
+                if isinstance(record._fields[field], (fields.One2many, fields.Many2one, fields.Many2many)):
                     continue
 
                 # Se il campo è Many2one, usa display_name
@@ -340,7 +341,8 @@ class RepairOrder(models.Model):
             
             # Blocco la firma dopo la modifica
             if 'signature' in vals:
-                self.write({'signature_locked': True})  
+                record.signature_locked = True
+                #self.write({'signature_locked': True})  
 
             # Tracciamento modifiche accessori
             if 'accessory_ids' in vals:
@@ -360,6 +362,8 @@ class RepairOrder(models.Model):
                 for acc_id, old_name in old_accessories.items():
                     if acc_id in new_accessories and old_name != new_accessories[acc_id]:
                         changed_fields.append(f"Modificato accessorio: <strong>{old_name} ➝ {new_accessories[acc_id]}</strong>")
+                    # Se voglio rilevare le modifiche “interne” ai record accessori, devo confrontare i singoli campi
+                    # Ad es. se i record già esistenti cambiano nome. In quell caso, devo implementarlo su accessor_id.
 
             # Tracciamento dello stato del muletto e aggiornamento del campo "Assegnato alla riparazione"
             if 'loaner_device_id' in vals:
@@ -382,6 +386,10 @@ class RepairOrder(models.Model):
                 new_credentials = record.credential_ids
 
                 # Troviamo quali credenziali sono state aggiunte e quali rimosse
+                # Se la versione di Odoo 18 dà problemi con l’operatore "-", bisogna usare la logica con .filtered()
+                # es.:
+                # added_credentials = new_credentials.filtered(lambda cred: cred.id not in old_credentials.ids)
+                # removed_credentials = old_credentials.filtered(lambda cred: cred.id not in new_credentials.ids)
                 added_credentials = new_credentials - old_credentials
                 removed_credentials = old_credentials - new_credentials
 
@@ -467,7 +475,7 @@ class RepairOrder(models.Model):
                     return {
                         'warning': {
                             'title': 'Attenzione',
-                            'message': 'Questo stato richiede l\'inserimento di almento un laboratorio esterno!',
+                            'message': 'Questo stato richiede un laboratorio esterno!',
                         }
                     }
             # Aggiorno automaticamente lo stato visibile al cliente
@@ -535,14 +543,18 @@ class RepairOrder(models.Model):
         for record in self:
             if record.qr_code:
                 record.qr_code_url = f"{base_url}/web/image/{record._name}/{record.id}/qr_code"
+            else:
+                record.qr_code_url = False
 
     @api.depends('qr_code_int')
     def _compute_qr_code_int_url(self):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
       
         for record in self:
-            if record.qr_code:
+            if record.qr_code_int:
                 record.qr_code_int_url = f"{base_url}/web/image/{record._name}/{record.id}/qr_code_int"
+            else:
+                record.qr_code_int_url = False
 
     @api.depends('signature')
     def _compute_signature_url(self):
@@ -560,7 +572,12 @@ class RepairOrder(models.Model):
             component_cost = sum(record.components_ids.mapped('lst_price'))  # Somma i prezzi di listino dei componenti
             lab_cost = sum(record.external_lab_ids.mapped('customer_cost'))  # Somma costi di tutti i laboratori
             software_cost = sum(record.software_ids.mapped('price'))  # Somma i costi dei software
-            record.expected_total = (record.tech_repair_cost + software_cost + lab_cost + component_cost) - record.advance_payment - record.discount_amount
+            record.expected_total = (
+                record.tech_repair_cost + 
+                software_cost + 
+                lab_cost + 
+                component_cost
+                ) - record.advance_payment - record.discount_amount
 
 
     # Calcola la scadenza della commessa in base al software con durata maggiore
@@ -602,7 +619,7 @@ class RepairOrder(models.Model):
 
         for record in self:
             if not record.renewal_date:
-                raise UserError("Non è possibile inviare la mail: la commessa non ha una data di rinnovo impostata.")
+                raise UserError("Nessuna data di rinnovo impostata.")
 
             if not record.customer_id.email:
                 raise UserError(f"Il cliente {record.customer_id.name} non ha un'email impostata!")
@@ -612,7 +629,9 @@ class RepairOrder(models.Model):
                 email_values = {
                     'email_to': record.customer_id.email,
                     'email_from': f"{record.company_id.name} <{record.company_id.email or ''}>", # se vuoto, imposta quello configurato
-                    'body_html': mail_template.body_html.replace('${object.customer_id.name}', record.customer_id.name).replace('${object.renewal_date}', str(record.renewal_date)),
+                    'body_html': mail_template.body_html
+                        .replace('${object.customer_id.name}', record.customer_id.name)
+                        .replace('${object.renewal_date}', str(record.renewal_date)),
                 }
                 
                 mail_template.send_mail(record.id, force_send=True, email_values=email_values)
