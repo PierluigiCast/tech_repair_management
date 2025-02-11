@@ -34,6 +34,7 @@ class RepairController(http.Controller):
             'repair': tech_repair_order,
             'customer_state': tech_repair_order.customer_state_id.name if tech_repair_order.customer_state_id else "Stato non ancora disponibile",
             'open_date': tech_repair_order.open_date.strftime('%d/%m/%Y %H:%M') if tech_repair_order.open_date else "Data non disponibile",
+            'last_modified_date': tech_repair_order.last_modified_date.strftime('%d/%m/%Y %H:%M') if tech_repair_order.last_modified_date else "Data non disponibile",
             'chat_messages': chat_messages
         })
 

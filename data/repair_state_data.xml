@@ -41,23 +41,30 @@
         <field name="is_external_lab">False</field>
         <field name="public_state_id" ref="tech_repair_state_pub_waiting_part"/>
     </record>
+    <record id="tech_repair_state_rec_part" model="tech.repair.state">
+        <field name="name">Ricambi Ricevuti</field>
+        <field name="sequence">7</field>
+        <field name="is_closed">False</field>
+        <field name="is_external_lab">False</field>
+        <field name="public_state_id" ref="tech_repair_state_pub_in_progress"/>
+    </record>
     <record id="tech_repair_state_ready" model="tech.repair.state">
         <field name="name">In Consegna</field>
-        <field name="sequence">7</field>
+        <field name="sequence">8</field>
         <field name="is_closed">False</field>
         <field name="is_external_lab">False</field>
         <field name="public_state_id" ref="tech_repair_state_pub_ready"/>
     </record>
     <record id="tech_repair_state_done" model="tech.repair.state">
         <field name="name">Consegnata</field>
-        <field name="sequence">8</field>
+        <field name="sequence">9</field>
         <field name="is_closed">True</field>
         <field name="is_external_lab">False</field>
         <field name="public_state_id" ref="tech_repair_state_pub_done"/>
     </record>
     <record id="tech_repair_state_not_done" model="tech.repair.state">
         <field name="name">Consegnata Non Risolta</field>
-        <field name="sequence">9</field>
+        <field name="sequence">10</field>
         <field name="is_closed">True</field>
         <field name="is_external_lab">False</field>
         <field name="public_state_id" ref="tech_repair_state_pub_not_done"/>

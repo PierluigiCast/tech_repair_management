@@ -5,15 +5,16 @@
         <field name="arch" type="xml">
             <form string="Gestione Riparazioni">
                  <header>
+                    
+                    <field name="state_id" widget="badge" options="{'clickable': True}"/>
+                </header>
+                <sheet>
                     <div name="button_box">
                         <button name="action_save_repair" type="object" string="Salva" class="oe_highlight" icon="fa-save"/>
                         <button name="action_print_repair_report" type="object" string="Commessa" class="oe_highlight" icon="fa-print"/>
                         <!-- Bottone per forzare l'invio dell'email -->
                         <button name="action_force_send_renewal_email" type="object" string="Invia Email di Rinnovo" class="oe_highlight"/>
                     </div>
-                    <field name="state_id" widget="badge" options="{'clickable': True}"/>
-                </header>
-                <sheet>
                     <group>
                         <group>
                             <field name="name" readonly="1"/>  <!-- Numero Riparazione (Generato Automaticamente) -->
@@ -111,7 +112,7 @@
                                 </field>
                             </group>
                         </page>
-                        <page string="Componenti Utilizzati" name="compon_used" class="fixed-height-page">
+                        <page string="Componenti / Ricambi" name="compon_used" class="fixed-height-page">
                             <group>
                                 <field name="components_ids" string=" ">
                                     <list editable="bottom">

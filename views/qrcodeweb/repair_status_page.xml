@@ -14,6 +14,7 @@
                                 <tr>
                                     <td style="font-size:13px; padding: 5px;"><strong>Numero Riparazione: </strong><t t-esc="repair.name"/></td>
                                     <td style="font-size:13px; padding: 5px;"><strong>Stato Attuale: </strong><t t-esc="customer_state"/></td>
+                                    <td style="font-size:13px; padding: 5px;"><strong>Costo Stimato: </strong>€ <t t-esc="repair.expected_total"/></td>
                                 </tr>
                                 <tr>
                                     <td>
@@ -22,6 +23,7 @@
                                         </a>
                                     </td>
                                     <td style="font-size:13px; padding: 5px;"><strong>Aperta il: </strong><t t-esc="open_date"/></td>
+                                    <td style="font-size:13px; padding: 5px;"><strong>Ultimo Aggiornamento: </strong><t t-esc="last_modified_date"/></td>
                                 </tr>
                                 
                             </tbody>
