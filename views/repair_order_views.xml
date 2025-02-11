@@ -115,11 +115,13 @@
                             <group>
                                 <field name="components_ids" string=" ">
                                     <list editable="bottom">
-                                        <field name="name"/>
-                                        <field name="supplier_id"/>
+                                        <field name="product_id"/>
+                                        <field name="supplier_id" domain="supplier_domain"/>
                                         <field name="purchase_date"/>
                                         <field name="receipt_date"/>
                                         <field name="serial_number"/>
+                                        <field name="pur_price"/>
+                                        <field name="lst_price"/>
                                     </list>
                                 </field>
                             </group>

@@ -166,7 +166,11 @@ class RepairOrder(models.Model):
     # Calcolo automatico del totale previsto
     expected_total = fields.Float(string='Totale Previsto €', compute='_compute_expected_total')
     # Componenti usati per la riparazione, presi dal magazzino
-    components_ids = fields.Many2many('product.product', string='Componenti Usati')
+    components_ids = fields.One2many(
+        'tech.repair.component',
+        'repair_order_id',
+        string='Componenti Utilizzati'
+    )
 
     # Dispositivo muletto assegnato temporaneamente al cliente
     loaner_device_id = fields.Many2one(
@@ -284,7 +288,7 @@ class RepairOrder(models.Model):
             if 'term_id' not in vals or not vals['term_id']:
                 vals['term_id'] = default_term.id if default_term else None
             
-            self._logger.info("Valori finali per la creazione: %s", vals)
+            #self._logger.info("Valori finali per la creazione: %s", vals)
 
         return super().create(vals_list)
         
@@ -430,13 +434,12 @@ class RepairOrder(models.Model):
 
                 if added_components:
                     # Recuperiamo i nomi (o qualsiasi info desideri) dal record product.product
-                    added_names = [c.display_name for c in added_components]
-                    changed_fields.append(
-                        f"Aggiunti componenti: <strong>{', '.join(added_names)}</strong>"
-                    )
+                    added_names = [c.product_id.display_name for c in added_components if c.product_id]
+                    changed_fields.append(f"Aggiunti componenti: <strong>{', '.join(added_names)}</strong>")
+                    
 
                 if removed_components:
-                    removed_names = [c.display_name for c in removed_components]
+                    removed_names = [c.product_id.display_name for c in removed_components if c.product_id]
                     changed_fields.append(
                         f"Rimossi componenti: <strong>{', '.join(removed_names)}</strong>"
                     )
@@ -522,6 +525,24 @@ class RepairOrder(models.Model):
                 record.customer_state_id = record.state_id.public_state_id
             else:
                 record.customer_state_id = False  # Resetta se non c'è un mapping
+
+
+    # @api.onchange('product_id')
+    # def _onchange_product_id(self):
+    #     if self.product_id:
+    #         # Calcoliamo la lista di ID partner validi
+    #         allowed_ids = self.product_id.product_tmpl_id.seller_ids.mapped('partner_id').ids
+    #         return {
+    #             'domain': {
+    #                 'supplier_id': [('id', 'in', allowed_ids)]
+    #             }
+    #         }
+    #     else:
+    #         return {
+    #             'domain': {
+    #                 'supplier_id': []
+    #             }
+    #         }
 
 
 
