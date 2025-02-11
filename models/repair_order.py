@@ -303,13 +303,14 @@ class RepairOrder(models.Model):
 
         # Ottiene le etichette leggibili dei campi
         field_labels = self.fields_get()
-
+        old_expected_totals = {}
         for record in self:
             old_values = {
                 field: record[field] 
                 for field in vals.keys() 
                 if field in record and field not in excluded_fields  # Escludiamo alcuni campi
             }
+            old_expected_totals[record.id] = record.expected_total
             old_loaner = record.loaner_device_id  # Salvo il muletto precedente
             old_credentials = record.credential_ids  # Salvo le credenziali precedenti
             old_accessories = {acc.id: acc.name for acc in record.accessory_ids} # Salvo gli accessori prima della modifica
@@ -344,7 +345,14 @@ class RepairOrder(models.Model):
                 if old_value != new_value:
                     field_name = field_labels[field]['string'] if field in field_labels else field
                     changed_fields.append(f"<strong>{field_name}</strong>: {old_value} ➝ <strong>{new_value}</strong>")
-            
+
+
+            new_total = record.expected_total
+            old_total = old_expected_totals[record.id]
+            if old_total != new_total:
+                diff = new_total - old_total
+                changed_fields.append(f"<strong>Totale Variato €:</strong> {('+ ' if diff >= 0 else '')}{diff}")
+
             # Blocco la firma dopo la modifica
             if 'signature' in vals:
                 record.signature_locked = True
