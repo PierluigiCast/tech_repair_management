@@ -4,6 +4,7 @@ import logging
 
 
 class RepairController(http.Controller):
+    _inherit = ['mail.channel']
 
     _logger = logging.getLogger(__name__)
 
@@ -17,25 +18,20 @@ class RepairController(http.Controller):
             
         tech_repair_order = request.env['tech.repair.order'].sudo().search([('token_url', '=', token)], limit=1)
 
-
-        # if not tech_repair_order.exists(): vista da creare se non trova la riparazione
-        #     return request.render('tech_repair_management.tech_repair_order', {})
-
         # Filtra solo i messaggi destinati al cliente
         chat_messages = request.env['tech.repair.chat.message'].sudo().search([
             ('tech_repair_order_id.token_url', '=', token)
         ], order='create_date asc')
 
         # Log per debug
-        self._logger.info("Messaggi trovati per la riparazione %s: %s", token, chat_messages)
-
+        #self._logger.info("Messaggi trovati per la riparazione %s: %s", token, chat_messages)
 
         return request.render('tech_repair_management.tech_repair_status_page', {
             'repair': tech_repair_order,
             'customer_state': tech_repair_order.customer_state_id.name if tech_repair_order.customer_state_id else "Stato non ancora disponibile",
             'open_date': tech_repair_order.open_date.strftime('%d/%m/%Y %H:%M') if tech_repair_order.open_date else "Data non disponibile",
             'last_modified_date': tech_repair_order.last_modified_date.strftime('%d/%m/%Y %H:%M') if tech_repair_order.last_modified_date else "Data non disponibile",
-            'chat_messages': chat_messages
+            'chat_messages': chat_messages,
         })
 
     # stringa pubblica per inviare i messaggi
@@ -61,8 +57,6 @@ class RepairController(http.Controller):
                     subtype_xmlid="mail.mt_comment",
                     body_is_html=True  # Permette la formattazione HTML
                 )
-
-                #self._logger.info("Messaggio ricevuto dal cliente per riparazione %s: %s", token, customer_message)
 
         return request.redirect(f'/repairstatus/{token}')
 

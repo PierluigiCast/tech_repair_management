@@ -786,6 +786,10 @@ class RepairOrder(models.Model):
     def action_print_repair_report(self):
         return self.env.ref('tech_repair_management.action_report_repair_order').report_action(self)
 
+    # Azione per dropdown
+    def action_print_dropdown(self):
+        return None
+
                 
 
     # Metodo per creare un ordine di vendita manualmente dalle riparazioni

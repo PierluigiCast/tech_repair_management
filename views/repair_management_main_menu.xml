@@ -6,8 +6,7 @@
               web_icon="tech_repair_management,static/description/icon.png"/>
 
     <!-- Sottomenù per le riparazioni -->
-    <menuitem id="tech_repair_order_menu" name="Riparazioni" parent="tech_repair_management_main_menu" sequence="1"/>
-    <menuitem id="tech_repair_order_submenu" name="Gestione Riparazioni" parent="tech_repair_order_menu" action="action_tech_repair_order"/>
+    <menuitem id="tech_repair_order_menu" name="Riparazioni" parent="tech_repair_management_main_menu" sequence="1" action="action_tech_repair_order"/>
 
     <!-- Sottomenù per la gestione dei dispositivi muletto -->
     <menuitem id="tech_repair_loaner_device_menu" name="Dispositivi Muletto" parent="tech_repair_management_main_menu" sequence="2"/>

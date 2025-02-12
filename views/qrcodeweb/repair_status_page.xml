@@ -18,7 +18,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <a t-att-href="'/repairstatus/pdf/%s' % repair.token_url" class="btn btn-danger mt-3 btn-sm">
+                                        <a t-att-href="'/repairstatus/pdf/%s' % repair.token_url" class="btn btn-info mt-3 btn-sm">
                                             Check-In Riparazione
                                         </a>
                                     </td>
@@ -38,12 +38,22 @@
                                 <t t-set="is_customer" t-value="chat.sender == 'customer'"/>
                                 <t t-set="is_technician" t-value="chat.sender == 'technician'"/>
 
-                                <div t-if="is_customer" class="alert alert-primary" style="font-size:13px;">
-                                    <strong>Cliente (<t t-esc="repair.customer_id.name"/>)</strong> <t t-esc="chat.message"/>
+                                <div t-if="is_customer" class="alert alert-info" style="font-size:13px;">
+                                    <strong>
+                                        <t t-esc="repair.customer_id.name"/> 
+                                        <t t-esc="chat.create_date.strftime('%d/%m/%Y %H:%M')"/>
+                                    </strong>
+                                    <br/>
+                                    <t t-esc="chat.message"/>
                                 </div>
                                 <div t-if="is_technician" class="alert alert-secondary" style="font-size:13px;">
-                                    <strong>Tecnico (<t t-esc="repair.assigned_to.name"/>)</strong> <t t-esc="chat.message"/>
-                                </div>
+                                    <strong>
+                                        Tecnico (<t t-esc="repair.assigned_to.name"/>) 
+                                        <t t-esc="chat.create_date.strftime('%d/%m/%Y %H:%M')"/>
+                                    </strong>
+                                    <br/>
+                                    <t t-esc="chat.message"/>
+                                </div>      
                             </t>
                         </div>
 
@@ -52,7 +62,7 @@
                             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                             <input type="hidden" name="token" t-att-value="repair.token_url"/>
                             <textarea name="customer_message" class="form-control" rows="2" placeholder="Scrivi un messaggio..." t-att-required="1"></textarea>
-                            <button type="submit" class="btn btn-primary mt-2">Invia</button>
+                            <button type="submit" class="btn btn-secondary mt-2">Invia</button>
                         </form>
                     </div>
                 </t>
