@@ -21,7 +21,9 @@
         'views/configurazione/repair_device_color_views.xml',
         'views/configurazione/repair_term_views.xml',
         'views/configurazione/repair_software.xml',
+        'views/configurazione/repair_worktype.xml',
         'views/report/repair_order_report.xml',
+        'views/report/repair_order_two_copies_report.xml',
         
         'views/repair_management_main_menu.xml',
         
@@ -30,6 +32,7 @@
         'data/repair_state_public.xml',
         'data/repair_state_data.xml',
         'data/repair_order_sequence.xml',
+        'data/repair_operation_data.xml',
         'data/device_data.xml',
         'data/repair_term.xml',
         'data/email_template_repair_renewal.xml',

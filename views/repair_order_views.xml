@@ -16,6 +16,7 @@
                             <button name="stampa_tech_dropdown_order" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">Stampa</button>
                             <div class="dropdown-menu" role="menu">
                                 <button name="action_print_repair_report" type="object" class="dropdown-item" string="Report" icon="fa-print"/>
+                                <button name="action_print_repair_two_copies_report" type="object" class="dropdown-item" string="Report2" icon="fa-print"/>
                             </div>
                             <!-- Dropdown Azioni -->
                             <button name="azioni_tech_dropdown_order" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">Azioni</button>
@@ -31,7 +32,7 @@
                             <field name="name" readonly="1"/>  <!-- Numero Riparazione (Generato Automaticamente) -->
                             <field name="customer_id" context="{'from_tech_repair_order': True}"/> <!-- Cliente options="{'no_create': True}"-->
                             <field name="category_id" required="1"/>  <!-- Categoria -->
-                            <field name="brand_id" required="1" domain="[('category_id', '=', category_id)]"/>  <!-- Marca -->
+                            <field name="brand_id" required="1"/>  <!-- Marca domain="[('category_id', '=', category_id)]"-->
                             <field name="model_id" required="1" domain="[('brand_id', '=', brand_id)]"/>  <!-- Modello -->
                             <field name="device_color" widget="many2one_tags"/> <!-- Colore -->
                             <field name="aesthetic_condition"/> <!-- Condizioni Estetiche -->
@@ -40,6 +41,7 @@
                             <field name="sim_pin"/>
                             <field name="device_password"/>
                             <field name="loaner_device_id" domain="[('status', '=', 'available')]"/> <!-- Muletto -->
+                            <field name="worktype"/>
                             <field name="problem_description"/>  <!-- Descrizione Problema -->
                         </group>
                         <group>

@@ -1,0 +1,52 @@
+<odoo>
+    <record id="tech_repair_worktype_simple_format" model="tech.repair.worktype">
+        <field name="name">Formattazione Senza Salvataggio Dati</field>
+        <field name="description">Formattazione Semplice</field>
+        <field name="price">60</field>
+    </record>
+    <record id="tech_repair_worktype_format" model="tech.repair.worktype">
+        <field name="name">Formattazione Con Salvataggio Dati</field>
+        <field name="description">Formattazione Con Salvataggio Dati</field>
+        <field name="price">80</field>
+    </record>
+    <record id="tech_repair_worktype_simple_phonemove" model="tech.repair.worktype">
+        <field name="name">Passaggio Dati Senza Recupero Credenziali</field>
+        <field name="description">Passaggio Dati tra 2 smartphone senza recupero delle credenziali</field>
+        <field name="price">30</field>
+    </record>
+    <record id="tech_repair_worktype_phonemove" model="tech.repair.worktype">
+        <field name="name">Passaggio Dati Con Recupero Credenziali</field>
+        <field name="description">Passaggio Dati tra 2 smartphone con recupero delle credenziali</field>
+        <field name="price">40</field>
+    </record>
+    <record id="tech_repair_worktype_pass_reset" model="tech.repair.worktype">
+        <field name="name">Ripristino / Reset Password</field>
+        <field name="description">Reset Password</field>
+        <field name="price">30</field>
+    </record>
+    <record id="tech_repair_worktype_license" model="tech.repair.worktype">
+        <field name="name">Aggiornamento Licenze</field>
+        <field name="description">Aggiornamento Licenze Software</field>
+        <field name="price">0</field>
+    </record>
+    <record id="tech_repair_worktype_recovery" model="tech.repair.worktype">
+        <field name="name">Recupero Dati</field>
+        <field name="description">Recupero Dati da Vostro dispositivo</field>
+        <field name="price">80</field>
+    </record>
+    <record id="tech_repair_worktype_phone_display" model="tech.repair.worktype">
+        <field name="name">Cambio Display</field>
+        <field name="description">Sostituzione display Vostro dispositivo</field>
+        <field name="price">0</field>
+    </record>
+    <record id="tech_repair_worktype_ori_battery" model="tech.repair.worktype">
+        <field name="name">Sost. Batteria Originale</field>
+        <field name="description">Sostituzione batteria originale Vostro dispositivo</field>
+        <field name="price">0</field>
+    </record>
+    <record id="tech_repair_worktype_comp_battery" model="tech.repair.worktype">
+        <field name="name">Sost. Batteria Compatibile</field>
+        <field name="description">Sostituzione batteria compatibile Vostro dispositivo</field>
+        <field name="price">0</field>
+    </record>
+</odoo>

@@ -41,84 +41,84 @@
     <!-- Apple -->
     <record id="brand_apple" model="tech.repair.device.brand">
         <field name="name">Apple</field>
-        <field name="category_id" ref="category_notebook"/>
+        
     </record>
 
     <record id="brand_apple" model="tech.repair.device.brand">
         <field name="name">Apple</field>
-        <field name="category_id" ref="category_smartphone"/>
+        
     </record>
 
     <!-- Samsung -->
     <record id="brand_samsung" model="tech.repair.device.brand">
         <field name="name">Samsung</field>
-        <field name="category_id" ref="category_smartphone"/>
+        
     </record>
 
     <!-- Dell -->
     <record id="brand_dell" model="tech.repair.device.brand">
         <field name="name">Dell</field>
-        <field name="category_id" ref="category_notebook"/>
+        
     </record>
 
     <!-- HP -->
     <record id="brand_hp" model="tech.repair.device.brand">
         <field name="name">HP</field>
-        <field name="category_id" ref="category_notebook"/>
+        
     </record>
 
     <!-- Lenovo -->
     <record id="brand_lenovo" model="tech.repair.device.brand">
         <field name="name">Lenovo</field>
-        <field name="category_id" ref="category_notebook"/>
+        
     </record>
 
     <!-- Asus -->
     <record id="brand_asus" model="tech.repair.device.brand">
         <field name="name">Asus</field>
-        <field name="category_id" ref="category_notebook"/>
+        
     </record>
 
     <!-- Acer -->
     <record id="brand_acer" model="tech.repair.device.brand">
         <field name="name">Acer</field>
-        <field name="category_id" ref="category_notebook"/>
+        
     </record>
 
     <!-- Sony -->
     <record id="brand_sony" model="tech.repair.device.brand">
         <field name="name">Sony</field>
-        <field name="category_id" ref="category_notebook"/>
+        
     </record>
 
     <!-- Microsoft -->
     <record id="brand_microsoft" model="tech.repair.device.brand">
         <field name="name">Microsoft</field>
-        <field name="category_id" ref="category_notebook"/>
+        
     </record>
 
     <!-- Xiaomi -->
     <record id="brand_xiaomi" model="tech.repair.device.brand">
         <field name="name">Xiaomi</field>
-        <field name="category_id" ref="category_notebook"/>
+        
     </record>
 
     <!-- LG -->
     <record id="brand_lg" model="tech.repair.device.brand">
         <field name="name">LG</field>
-        <field name="category_id" ref="category_notebook"/>
+        
     </record>
 
     <!-- Huawei -->
     <record id="brand_huawei" model="tech.repair.device.brand">
         <field name="name">Huawei</field>
-        <field name="category_id" ref="category_notebook"/>
+        
     </record>
 
     <!-- Google -->
     <record id="brand_google" model="tech.repair.device.brand">
         <field name="name">Google</field>
-        <field name="category_id" ref="category_smartphone"/>
+        
     </record>
 
 

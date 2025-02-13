@@ -1,12 +1,12 @@
 <!-- views/repair_order_report.xml -->
 <odoo>
 
-    <record id="paperformat_repair_order" model="report.paperformat">
+    <record id="paperformat_repair_order_two_copies" model="report.paperformat">
         <field name="name">Repair Order Format</field>
         <field name="format">A4</field>
         <field name="orientation">Portrait</field>
-        <field name="margin_top">20</field>
-        <field name="margin_bottom">20</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
         <field name="margin_left">10</field>
         <field name="margin_right">10</field>
         <field name="header_line">False</field>
@@ -14,24 +14,156 @@
         <field name="dpi">90</field>
     </record>
 
-    <record id="action_report_repair_order" model="ir.actions.report">
+    <record id="action_report_repair_order_two_copies" model="ir.actions.report">
         <field name="name">Repair Order Report</field>
         <field name="model">tech.repair.order</field>
         <field name="report_type">qweb-pdf</field>
         <field name="print_report_name">'Riparazione_' + object.name</field>
-        <field name="report_name">tech_repair_management.repair_order_report_template</field>
-        <field name="paperformat_id" ref="paperformat_repair_order"/>
+        <field name="report_name">tech_repair_management.repair_order_report_two_copies_template</field>
+        <field name="paperformat_id" ref="paperformat_repair_order_two_copies"/>
         <field name="binding_model_id" ref="model_tech_repair_order"/>
         <field name="binding_type">report</field>
     </record>
 
 
-    <template id="repair_order_report_template">
+    <template id="repair_order_report_two_copies_template">
         <t t-call="web.html_container">
             <t t-call="web.basic_layout">
                 <t t-foreach="docs" t-as="o">
                     <div class="page">
-                        <h4 style="text-align: center;">Check-In Riparazione</h4>
+
+                        <table class="table table-borderless table-sm w-100" style="border-collapse: collapse; table-layout: fixed; font-size:11px;">
+                            <colgroup>
+                                <col style="width: 33%;"/>
+                                <col style="width: 33%;"/>
+                                <col style="width: 33%;"/>
+                            </colgroup>
+                            <tr>
+
+                                <td class="text-start">
+                                    <div style="display: table; font-size:13px; background: #3d3d3d; border: 1px solid #2f2f2f; width:80%; height:60px">
+                                        <p style="display: table-cell; vertical-align: middle; text-align: center; margin-top: 0; margin-bottom: 0; color: #ffffff;">
+                                            Check-In Numero:<br/>
+                                            <span t-field="o.name"/>
+                                        </p>
+                                    </div>
+                                </td>
+
+                                <td class="text-center" style="font-size:11px;">
+                                    Operatore Check-In: <b><span t-field="o.opened_by"/></b>
+                                    <br/>
+                                    Tecnico Assegnato: <b><span t-field="o.assigned_to"/></b>
+                                </td>
+
+                                <td
+                                    class="text-end">
+                                    <!-- logo -->
+                                    <img t-att-src="'/web/image/res.company/' + str(o.company_id.id) + '/logo'" style="max-width: 200px; max-height: 80px;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-start">
+                                    <div>
+                                        <p style="margin-top: 0; margin-bottom: 0;">
+                                            Cliente:
+                                            <b><span t-field="o.customer_id.display_name"/></b>
+                                            <br/>
+                                            Telefono:
+                                            <b><span t-field="o.customer_id.mobile"/></b>
+                                            <br/>
+                                            Mail:
+                                            <b><span t-field="o.customer_id.email"/></b>
+                                        </p>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <div style="margin-top: -25px;">
+                                        <b style="font-size:9px;">Copia Per USO INTERNO</b><br/>
+                                        <t t-if="o.qr_code_int_url">
+                                            <img t-att-src="o.qr_code_int_url" style="width:100px; height:100px;"/>
+                                        </t>
+                                    </div>
+                                </td>
+                                <td class="text-end">
+                                    <div style="font-size:8px; text-align: right !important;">
+                                        <span t-esc="(o.company_id.partner_id.street).strip()"/>
+                                        <br/>
+                                        <span t-esc="(o.company_id.partner_id.city or '').strip()"/>
+                                        (<span t-esc="(o.company_id.partner_id.state_id.name or '').strip()"/>)
+                                        <span t-esc="(o.company_id.partner_id.zip or '').strip()"/>
+                                        <br/>
+                                        <span t-esc="o.company_id.partner_id.phone"/>
+                                        <br/>
+                                        <span t-esc="o.company_id.partner_id.email"/>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-bordered table-sm w-100" style="border: 1px solid #ccc; border-collapse: collapse; table-layout: fixed; font-size:11px;">
+                            <colgroup>
+                                <col style="width: 33%;"/>
+                                <col style="width: 40%;"/>
+                                <col style="width: 23%;"/>
+                            </colgroup>
+                            <tr>
+                                <td class="text-start">
+                                    Categoria: <b><span t-field="o.category_id.name"/></b> <br/>
+                                    Marca: <b><span t-field="o.brand_id.name"/></b> <br/>
+                                    Modello: <b><span t-field="o.model_id.name"/></b> <br/>
+                                    IMEI / Seriale: <b><span t-field="o.serial_number"/></b> <br/>
+                                    Condizioni Estetiche: <b><span t-field="o.aesthetic_condition"/></b> <br/>
+                                    Difetti Visivi: <b><span t-field="o.aesthetic_state"/></b> <br/>
+                                </td>
+
+                                <td class="text-center" style="text-align: left !important;">
+                                    <table style="width=100%; font-size:10px; margin-left:10px;">
+                                        <tr>
+                                            <td class="text-start" style="width: 33%;">Pin: <b><span t-field="o.sim_pin"/></b></td>
+                                            <td class="text-center" style="width: 33%;"></td>
+                                            <td class="text-end" style="width: 33%;">&#160;Pass: <b><span t-field="o.device_password"/></b></td>
+                                        </tr>
+                                    </table>
+                                    <table style="width=100%; font-size:10px; margin-left:10px;">
+                                        <t t-foreach="o.credential_ids" t-as="c">
+                                            <tr>
+                                            <td style="width: 20%;">S.: <b><span t-field="c.service_type"/></b></td>
+                                            <td style="width: 40%;">&#160;U.: <b><span t-field="c.username"/></b></td>
+                                            <td style="width: 40%;">&#160;P.: <b><span t-field="c.password"/></b></td>
+                                            </tr>
+                                        </t>
+                                    </table>
+                                </td>
+
+                                <td class="text-end" style="font-size: 10px;">
+                                    <div>Data Check-In:</div>
+                                    <div><b><span t-field="o.open_date"/></b></div>
+                                    <div>Totale: €<b><span t-esc="'%.2f' % o.tech_repair_cost"/></b></div>
+                                    <div>Sconto: €<b><span t-esc="'%.2f' % o.discount_amount"/></b></div>
+                                    <div>Acconto: €<b><span t-esc="'%.2f' % o.advance_payment"/></b></div>
+                                    <div>A Saldo: €<b><span t-esc="'%.2f' % o.expected_total"/></b></div>
+                                </td>
+                            </tr>
+                        </table>
+
+                         <table class="table table-bordered table-sm w-100" style="border: 1px solid #ccc; border-collapse: collapse; table-layout: fixed; font-size:11px;">
+                            <colgroup>
+                                <col style="width: 50%;"/>
+                            </colgroup>
+                            <tr>
+                                <td class="text-start">
+                                Lavoro:  <b><span t-field="o.worktype"/></b> <br/>
+                                Problema:  <b><span t-field="o.problem_description"/></b> <br/>
+                                </td>
+                            </tr>
+                            <tr style="font-size: 12px; min-heigth:80px;">
+                                <td class="text-start">
+                                Operazioni Svolte e Note di Lavorazione:
+                                </td>
+                            </tr>
+                        </table>
+
 
                         <!-- QR Codes -->
                         <table style="width:100%; text-align:center; margin-bottom:20px;">
@@ -42,61 +174,83 @@
                                     </t>
                                 </td>
                                 <td>
-                                    <t t-if="o.qr_code_int_url">
-                                        <img t-att-src="o.qr_code_int_url" style="width:150px; height:150px;"/>
-                                    </t>
+                                    
                                 </td>
                             </tr>
                             <tr>
-                                <td><strong>QR Code Cliente</strong></td>
-                                <td><strong>QR Code Interno</strong></td>
+                                <td>
+                                    <strong>QR Code Cliente</strong>
+                                </td>
+                                <td>
+                                    <strong>QR Code Interno</strong>
+                                </td>
                             </tr>
                         </table>
 
                         <!-- Tabella con i dettagli della riparazione -->
                         <table style="width:100%; border-collapse: collapse; font-size:12px;">
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"><strong>Numero Riparazione:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <strong>Numero Riparazione:</strong>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;"><span t-field="o.name"/></td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"><strong>Cliente:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <strong>Cliente:</strong>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;"><span t-field="o.customer_id.display_name"/></td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"><strong>Categoria:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <strong>Categoria:</strong>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;"><span t-field="o.category_id.name"/></td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"><strong>Marca:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <strong>Marca:</strong>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;"><span t-field="o.brand_id.name"/></td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"><strong>Modello:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <strong>Modello:</strong>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;"><span t-field="o.model_id.name"/></td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"><strong>Problema dichiarato:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <strong>Problema dichiarato:</strong>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;"><span t-field="o.problem_description"/></td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"><strong>Operazioni Svolte:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <strong>Operazioni Svolte:</strong>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;"><span t-field="o.operations"/></td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"><strong>Costo Riparazioni:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <strong>Costo Riparazioni:</strong>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;"><span t-field="o.tech_repair_cost"/></td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"><strong>Acconto:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <strong>Acconto:</strong>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;"><span t-field="o.advance_payment"/></td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"><strong>Totale:</strong></td>
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <strong>Totale:</strong>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;"><span t-field="o.expected_total"/></td>
                             </tr>
                         </table>
-                        
+
 
                         <!-- Firma Cliente -->
                         <table style="width:100%; text-align:center; margin-top:20px;">
@@ -108,7 +262,9 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td><strong>Firma del Cliente</strong></td>
+                                <td>
+                                    <strong>Firma del Cliente</strong>
+                                </td>
                             </tr>
                             <tr>
                                 <td>
@@ -123,7 +279,6 @@
             </t>
         </t>
     </template>
-
 
 
 </odoo>

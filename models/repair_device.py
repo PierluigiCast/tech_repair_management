@@ -12,7 +12,6 @@ class RepairDeviceBrand(models.Model):
     _description = 'Marca Dispositivi Riparazione'
 
     name = fields.Char(string='Marca', required=True)
-    category_id = fields.Many2one('tech.repair.device.category', string='Categoria', required=True)
 
 
 class RepairDeviceModel(models.Model):

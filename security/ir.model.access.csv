@@ -17,3 +17,4 @@ access_tech_repair_device_color,access.tech.repair.device.color,model_tech_repai
 access_tech_repair_term,access.tech.repair.term,model_tech_repair_term,,1,1,1,1
 access_tech_repair_software,access.tech.repair.software,model_tech_repair_software,,1,1,1,1
 access_tech_repair_component,access.tech.repair.component,model_tech_repair_component,,1,1,1,1
+access_tech_repair_worktype,access.tech.repair.worktype,model_tech_repair_worktype,,1,1,1,1

@@ -135,9 +135,16 @@ class RepairOrder(models.Model):
 
     # Descrizione del problema segnalato dal cliente
     problem_description = fields.Text(
-        string='Descrizione Problema',
+        string='Descrizione Aggiuntiva Problema',
         help="Problema dichiarato dal cliente"
         )
+
+    # Lavoro da svolgere
+    worktype = fields.Many2one(
+        'tech.repair.worktype',
+        string="Lavoro da svolgere",
+        required=True
+    )
 
     # Operazioni svolte dal tecnico
     # operations = fields.Text(string='Operazioni Svolte')
@@ -535,25 +542,6 @@ class RepairOrder(models.Model):
                 record.customer_state_id = False  # Resetta se non c'è un mapping
 
 
-    # @api.onchange('product_id')
-    # def _onchange_product_id(self):
-    #     if self.product_id:
-    #         # Calcoliamo la lista di ID partner validi
-    #         allowed_ids = self.product_id.product_tmpl_id.seller_ids.mapped('partner_id').ids
-    #         return {
-    #             'domain': {
-    #                 'supplier_id': [('id', 'in', allowed_ids)]
-    #             }
-    #         }
-    #     else:
-    #         return {
-    #             'domain': {
-    #                 'supplier_id': []
-    #             }
-    #         }
-
-
-
     @api.depends('state_id')
     def _compute_close_date(self):
         for record in self:
@@ -634,17 +622,19 @@ class RepairOrder(models.Model):
 
 
     # Metodo per calcolare il totale previsto sottraendo l'acconto
-    @api.depends('tech_repair_cost', 'advance_payment', 'components_ids', 'external_lab_ids.customer_cost', 'discount_amount')
+    @api.depends('tech_repair_cost', 'advance_payment', 'components_ids', 'external_lab_ids.customer_cost', 'discount_amount', 'worktype')
     def _compute_expected_total(self):
         for record in self:
             component_cost = sum(record.components_ids.mapped('lst_price'))  # Somma i prezzi di listino dei componenti
             lab_cost = sum(record.external_lab_ids.mapped('customer_cost'))  # Somma costi di tutti i laboratori
             software_cost = sum(record.software_ids.mapped('price'))  # Somma i costi dei software
+            worktype_cost = sum(record.worktype.mapped('price')) # estri costo lavorazione
             record.expected_total = (
                 record.tech_repair_cost + 
                 software_cost + 
                 lab_cost + 
-                component_cost
+                component_cost + 
+                worktype_cost
                 ) - record.advance_payment - record.discount_amount
 
 
@@ -782,13 +772,14 @@ class RepairOrder(models.Model):
             }
         }
 
-    # Azione per stampare il report della riparazione 
+    # Azioni per stampare il report della riparazione 
     def action_print_repair_report(self):
         return self.env.ref('tech_repair_management.action_report_repair_order').report_action(self)
 
-    # Azione per dropdown
-    def action_print_dropdown(self):
-        return None
+    def action_print_repair_two_copies_report(self):
+        return self.env.ref('tech_repair_management.action_report_repair_order_two_copies').report_action(self)
+
+    
 
                 
 

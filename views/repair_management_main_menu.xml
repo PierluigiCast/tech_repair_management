@@ -1,28 +1,46 @@
 <odoo>
-    <!-- Menu principale per la gestione delle riparazioni con icona -->
+    <!-- Aggiunta dell'app per la gestione delle riparazioni con icona -->
     <menuitem id="tech_repair_management_main_menu"
               name="Gestione Riparazioni"
               sequence="-1"
               web_icon="tech_repair_management,static/description/icon.png"/>
 
-    <!-- Sottomenù per le riparazioni -->
+
+    <!-- Menu per le riparazioni -->
     <menuitem id="tech_repair_order_menu" name="Riparazioni" parent="tech_repair_management_main_menu" sequence="1" action="action_tech_repair_order"/>
 
-    <!-- Sottomenù per la gestione dei dispositivi muletto -->
+    <!-- Menu per la gestione dei dispositivi muletto -->
     <menuitem id="tech_repair_loaner_device_menu" name="Dispositivi Muletto" parent="tech_repair_management_main_menu" sequence="2"/>
-    <menuitem id="tech_repair_loaner_device_submenu" name="Gestione Muletto" parent="tech_repair_loaner_device_menu" action="action_tech_repair_loaner"/>
-    <menuitem id="tech_repair_software" name="Gestione Software" parent="tech_repair_management_main_menu" action="action_tech_repair_software"/>
-
-    <menuitem id="tech_repair_config_menu" name="Configurazione" parent="tech_repair_management_main_menu" sequence="3"/>
-    <menuitem id="tech_repair_category_menu" name="Categorie Dispositivi" parent="tech_repair_config_menu" action="action_tech_repair_category"/>
-    <menuitem id="tech_repair_brand_menu" name="Marche Dispositivi" parent="tech_repair_config_menu" action="action_tech_repair_brand"/>
-    <menuitem id="tech_repair_model_menu" name="Modelli Dispositivi" parent="tech_repair_config_menu" action="action_tech_repair_model"/>
+        <menuitem id="tech_repair_loaner_device_submenu" name="Gestione Muletto" parent="tech_repair_loaner_device_menu" action="action_tech_repair_loaner"/>
     
-    <!-- Sottomenù per la gestione degli stati di riparazione -->
-    <menuitem id="tech_repair_state_submenu" name="Gestione Stati" parent="tech_repair_config_menu" action="action_tech_repair_state"/>
-    <menuitem id="tech_repair_tech_repair_state_public" name="Stati Online per il Cliente" parent="tech_repair_config_menu" action="action_tech_repair_state_public"/>
-    <menuitem id="tech_repair_device_color" name="Colori Dispositivi" parent="tech_repair_config_menu" action="action_tech_repair_device_color"/>
-    <menuitem id="tech_repair_term" name="Gestione Informative" parent="tech_repair_config_menu" action="action_tech_repair_term"/>
+    <!-- Menu per la configurazione -->
+    <menuitem id="tech_repair_config_menu" name="Configurazione" parent="tech_repair_management_main_menu" sequence="3"/>
+        <!-- Sotto Menu Dispositivi-->
+        <menuitem id="tech_repair_device_menu" name="Dispositivi" parent="tech_repair_config_menu"/>
+            <!-- Elementi sottomenu Dispositivi-->
+            <menuitem id="tech_repair_category_menu" name="Categorie Dispositivi" parent="tech_repair_device_menu" action="action_tech_repair_category"/>
+            <menuitem id="tech_repair_brand_menu" name="Marche Dispositivi" parent="tech_repair_device_menu" action="action_tech_repair_brand"/>
+            <menuitem id="tech_repair_model_menu" name="Modelli Dispositivi" parent="tech_repair_device_menu" action="action_tech_repair_model"/>
+            <menuitem id="tech_repair_device_color" name="Colori Dispositivi" parent="tech_repair_device_menu" action="action_tech_repair_device_color"/>
 
+        <!-- Sotto Menu Stati-->
+        <menuitem id="tech_repair_status_menu" name="Stati" parent="tech_repair_config_menu"/>
+            <!-- Elementi sottomenu Stati-->
+            <menuitem id="tech_repair_state_submenu" name="Gestione Stati Interni" parent="tech_repair_status_menu" action="action_tech_repair_state"/>
+            <menuitem id="tech_repair_tech_repair_state_public" name="Stati Online per il Cliente" parent="tech_repair_status_menu" action="action_tech_repair_state_public"/>
+        
+        <!-- Sotto Menu Prezzi-->
+        <menuitem id="tech_repair_price_menu" name="Prezzi" parent="tech_repair_config_menu"/>
+            <menuitem id="tech_repair_worktype" name="Gestione Difetti e Listino" parent="tech_repair_price_menu" action="action_tech_repair_worktype"/>
+            <menuitem id="tech_repair_software" name="Gestione Software" parent="tech_repair_price_menu" action="action_tech_repair_software"/>
+
+        <!-- Sotto Menu Altro-->
+        <menuitem id="tech_repair_other_menu" name="Altro" parent="tech_repair_config_menu"/>
+            <menuitem id="tech_repair_term" name="Gestione Informative" parent="tech_repair_other_menu" action="action_tech_repair_term" sequence="20"/>
+    
+    
+
+    
+    
 
 </odoo>
