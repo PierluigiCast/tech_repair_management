@@ -34,19 +34,14 @@
         <field name="description">Recupero Dati da Vostro dispositivo</field>
         <field name="price">80</field>
     </record>
-    <record id="tech_repair_worktype_phone_display" model="tech.repair.worktype">
-        <field name="name">Cambio Display</field>
-        <field name="description">Sostituzione display Vostro dispositivo</field>
+    <record id="tech_repair_worktype_ori_component" model="tech.repair.worktype">
+        <field name="name">Sost. Con Parti Originali</field>
+        <field name="description">Sostituzione con parti originali su Vostro dispositivo</field>
         <field name="price">0</field>
     </record>
-    <record id="tech_repair_worktype_ori_battery" model="tech.repair.worktype">
-        <field name="name">Sost. Batteria Originale</field>
-        <field name="description">Sostituzione batteria originale Vostro dispositivo</field>
-        <field name="price">0</field>
-    </record>
-    <record id="tech_repair_worktype_comp_battery" model="tech.repair.worktype">
-        <field name="name">Sost. Batteria Compatibile</field>
-        <field name="description">Sostituzione batteria compatibile Vostro dispositivo</field>
+    <record id="tech_repair_worktype_comp_component" model="tech.repair.worktype">
+        <field name="name">Sost. Con Parti Compatibilo</field>
+        <field name="description">Sostituzione con parti compatibili su Vostro dispositivo</field>
         <field name="price">0</field>
     </record>
 </odoo>
