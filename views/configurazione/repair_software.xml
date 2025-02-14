@@ -10,6 +10,8 @@
                 <field name="price"/>
                 <field name="renewal_required"/>
                 <field name="duration" invisible="renewal_required == False"/>
+                <field name="add_to_sum"/>
+
             </list>
         </field>
     </record>
@@ -26,6 +28,7 @@
                         <field name="price"/>
                         <field name="renewal_required"/>
                         <field name="duration" invisible="renewal_required == False"/>
+                        <field name="add_to_sum"/>
                     </group>
                 </sheet>
                 <!-- <footer>

@@ -2,7 +2,7 @@
     'name': 'TECH 3.0 Srl Riparazioni',
     'version': '1.0',
     'summary': 'Commesse Riparazioni in Odoo 18',
-    'description': 'Aggiunge funzionalità delle commesse di riparazione by TECH 3.0 Srl',
+    'description': 'Management Tech Laboratory with Clients Online Chat',
     'author': 'TECH 3.0 Srl',
     'category': 'Services',
     'depends': ['base', 'sale', 'product', 'web', 'website', 'website_payment', 'mail', 'contacts', 'crm'],

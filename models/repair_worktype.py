@@ -15,3 +15,4 @@ class RepairWorktype(models.Model):
         help="Inserisci una descrizione completa per la stampa e usa '/' per i comandi."
         )
     price = fields.Float(string='Prezzo', required=True, default=0.0)
+    add_to_sum = fields.Boolean(string='Agg. a Tot.', default=False)

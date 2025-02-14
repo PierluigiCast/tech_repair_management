@@ -8,6 +8,8 @@ class RepairSoftware(models.Model):
     name = fields.Char(string='Software', required=True, index=True)
     price = fields.Float(string='Prezzo', required=True, default=0.0)
     renewal_required = fields.Boolean(string='Necessita Rinnovo', default=False)
+    add_to_sum = fields.Boolean(string='Agg. a Tot.', default=False)
+
     
     duration = fields.Selection([
         ('1', '1 Mese'),

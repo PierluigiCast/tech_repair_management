@@ -17,6 +17,8 @@ class RepairExternalLab(models.Model):
     operation_description = fields.Text(string='Descrizione Operazione')
     external_cost = fields.Float(string='Costo a Noi', default=0.0)
     customer_cost = fields.Float(string='Costo al Cliente', default=0.0)
+    add_to_sum = fields.Boolean(string='Agg. a Tot.', default=False)
+
 
      # Data invio merce
     send_date = fields.Datetime(string='Data Partito da TECH', readonly=False)

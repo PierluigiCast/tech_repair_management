@@ -9,6 +9,7 @@
                         <field name="name"/>
                         <field name="description"/>
                         <field name="price"/>
+                        <field name="add_to_sum"/>
                     </group>
                 </sheet>
             </form>
@@ -23,6 +24,7 @@
                 <field name="name"/>
                 <field name="description"/>
                 <field name="price"/>
+                <field name="add_to_sum"/>
             </list>
         </field>
     </record>

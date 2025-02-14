@@ -121,6 +121,7 @@
                                         <field name="price"/>
                                         <field name="renewal_required"/>
                                         <field name="duration" invisible="renewal_required == False"/>
+                                        <field name="add_to_sum"/>
                                     </list>
                                 </field>
                             </group>
@@ -136,6 +137,7 @@
                                         <field name="serial_number"/>
                                         <field name="pur_price"/>
                                         <field name="lst_price"/>
+                                        <field name="add_to_sum"/>
                                     </list>
                                 </field>
                             </group>
@@ -149,6 +151,7 @@
                                     <field name="customer_cost"/>
                                     <field name="send_date"/>
                                     <field name="out_date"/>
+                                    <field name="add_to_sum"/>
                                 </list>
                             </field>
                         </page>

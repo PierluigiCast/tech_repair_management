@@ -28,6 +28,7 @@ class RepairComponent(models.Model):
     serial_number = fields.Char(string="Seriale")
     pur_price = fields.Float(string='Costo Componente €', default=0.0)
     lst_price = fields.Float(string='Prezzo €', default=0.0)
+    add_to_sum = fields.Boolean(string='Agg. a Tot.', default=False)
 
 
     # Calcolo il dominio valido per supplier_id in base ai seller_ids del template e lo imposto nella vista
