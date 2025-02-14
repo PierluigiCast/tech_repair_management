@@ -115,13 +115,13 @@
                         </page>
                         <page string="Software Da Installare" name="software" class="fixed-height-page">
                             <group>
-                                <field name="software_ids" string=" ">
-                                    <list>
-                                        <field name="name"/>
-                                        <field name="price"/>
-                                        <field name="renewal_required"/>
-                                        <field name="duration" invisible="renewal_required == False"/>
-                                        <field name="add_to_sum"/>
+                                <field name="software_line_ids" string=" ">
+                                    <list editable="bottom">
+                                        <field name="software_id" string="Software"/>
+                                        <field name="software_price" string="Prezzo" readonly="1"/>
+                                        <field name="software_renewal_required" string="Rinnovo Richiesto" readonly="1"/>
+                                        <field name="software_duration" string="Durata" readonly="1" attrs="{'invisible': [('software_id.renewal_required', '=', False)]}"/>
+                                        <field name="add_to_sum" string="Aggiungi al Totale"/>
                                     </list>
                                 </field>
                             </group>

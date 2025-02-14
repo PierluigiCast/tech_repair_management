@@ -70,13 +70,11 @@ class RepairOrder(models.Model):
         string="Accessori",
     )
 
-    # software da installare
-    software_ids = fields.Many2many(
-        'tech.repair.software',  
-        'repair_software_rel',   # Nome della tabella di relazione
-        'repair_id',             # Campo che collega a tech.repair.order
-        'software_id',           # Campo che collega a tech.repair.software
-        string='Software Installati'
+    # software da installare modulo intermedio
+    software_line_ids = fields.One2many(
+    'tech.repair.software.line', 
+    'repair_order_id', 
+    string='Software Installati'
     )
 
 
@@ -322,8 +320,8 @@ class RepairOrder(models.Model):
             old_credentials = record.credential_ids  # Salvo le credenziali precedenti
             old_accessories = {acc.id: acc.name for acc in record.accessory_ids} # Salvo gli accessori prima della modifica
             old_components = record.components_ids # Salvo i componenti prima della mod
-            old_software = record.software_ids # Salvo i software prima della mod
-            
+            old_software_lines = {line.id: line.software_id.display_name for line in record.software_line_ids} # Salvo le righe software prima della mod
+
 
         res = super(RepairOrder, self).write(vals)  # Salvo prima le modifiche senza causare ricorsione
 
@@ -460,22 +458,41 @@ class RepairOrder(models.Model):
                     )
 
             # Controllo modifiche software
-            if 'software_ids' in vals:
-                new_software = record.software_ids
-                added_software = new_software - old_software
-                removed_software = old_software - new_software
-
-                if added_software:
-                    added_names = [s.display_name for s in added_software]
+            if 'software_line_ids' in vals:
+                # Ottieni le righe software attualmente presenti (dopo il write)
+                new_lines = record.software_line_ids
+                # Calcola le righe aggiunte: confronto in base agli ID
+                added_lines = new_lines.filtered(lambda l: l.id not in old_software_lines)
+                if added_lines:
+                    added_names = [line.software_id.display_name for line in added_lines]
                     changed_fields.append(
                         f"Aggiunti software: <strong>{', '.join(added_names)}</strong>"
                     )
-
-                if removed_software:
-                    removed_names = [s.display_name for s in removed_software]
+                
+                # Calcola le righe rimosse: gli ID presenti nel dizionario ma non più in record.software_line_ids.ids
+                new_line_ids = new_lines.ids
+                removed_names = [old_software_lines[line_id] for line_id in old_software_lines if line_id not in new_line_ids]
+                if removed_names:
                     changed_fields.append(
                         f"Rimossi software: <strong>{', '.join(removed_names)}</strong>"
                     )
+                
+                # Verifica eventuali modifiche al flag add_to_sum nelle righe esistenti
+                for line in new_lines:
+                    old_line = self.env['tech.repair.software.line'].browse(line.id)
+                    # Se il record esisteva già (cioè era presente nei dati iniziali)
+                    if line.id in old_software_lines:
+                        # Qui possiamo controllare il flag; essendo la riga ancora presente, possiamo accedervi
+                        if old_line.add_to_sum != line.add_to_sum:
+                            if line.add_to_sum:
+                                changed_fields.append(
+                                    f"Software <strong>{line.software_id.display_name}</strong> aggiunto al totale"
+                                )
+                            else:
+                                changed_fields.append(
+                                    f"Software <strong>{line.software_id.display_name}</strong> rimosso dal totale"
+                                )
+
 
             # Se ci sono modifiche, registro il messaggio nel Chatter
             if changed_fields:
@@ -622,29 +639,25 @@ class RepairOrder(models.Model):
 
 
     # Metodo per calcolare il totale previsto sottraendo l'acconto
-    @api.depends('tech_repair_cost', 'advance_payment', 'components_ids', 'external_lab_ids.customer_cost', 'discount_amount', 'worktype')
+    @api.depends('tech_repair_cost', 'advance_payment', 'components_ids', 
+             'external_lab_ids.customer_cost', 'discount_amount', 'worktype', 'software_line_ids')
     def _compute_expected_total(self):
         for record in self:
-            component_cost = sum(record.components_ids.mapped('lst_price'))  # Somma i prezzi di listino dei componenti
-            lab_cost = sum(record.external_lab_ids.mapped('customer_cost'))  # Somma costi di tutti i laboratori
-            software_cost = sum(record.software_ids.mapped('price'))  # Somma i costi dei software
-            worktype_cost = sum(record.worktype.mapped('price')) # estri costo lavorazione
+            component_cost = sum(record.components_ids.mapped('lst_price'))
+            lab_cost = sum(record.external_lab_ids.mapped('customer_cost'))
+            # Somma solo i costi dei software che devono essere aggiunti al totale
+            software_cost = sum(line.software_id.price for line in record.software_line_ids if line.add_to_sum)
+            worktype_cost = sum(record.worktype.mapped('price'))
             record.expected_total = (
-                record.tech_repair_cost + 
-                software_cost + 
-                lab_cost + 
-                component_cost + 
-                worktype_cost
-                ) - record.advance_payment - record.discount_amount
+                record.tech_repair_cost + software_cost + lab_cost + component_cost + worktype_cost
+            ) - record.advance_payment - record.discount_amount
 
-
-    # Calcola la scadenza della commessa in base al software con durata maggiore
-    @api.depends('software_ids', 'close_date')
+    @api.depends('software_line_ids.software_id.duration', 'close_date')
     def _compute_renewal_date(self):
         for record in self:
-            if record.software_ids and record.close_date:
+            if record.software_line_ids and record.close_date:
                 # Trova la durata massima tra i software installati
-                max_duration = max(int(software.duration) for software in record.software_ids)
+                max_duration = max(int(line.software_id.duration) for line in record.software_line_ids)
                 record.renewal_date = record.close_date + timedelta(days=max_duration * 30)
             else:
                 record.renewal_date = False
@@ -701,39 +714,44 @@ class RepairOrder(models.Model):
 
                 self.crm_lead_creation(record)
 
-                
 
     def crm_lead_creation(self, record):
-        crm_lead = self.env['crm.lead']
-        crm_tag = self.env['crm.tag']
+        crm_lead_obj = self.env['crm.lead']
+        
+        # Cerca se esiste già un lead associato a questa commessa
+        existing_lead = crm_lead_obj.search([('repair_order_id', '=', record.id)], limit=1)
+        if existing_lead:
+            # Se esiste già, puoi decidere di uscire o eventualmente aggiornare il lead esistente
+            return
 
+        crm_tag = self.env['crm.tag']
         # Cerca se esiste già l'etichetta "Rinnovi"
         renewal_tag = crm_tag.search([('name', '=', 'Rinnovi')], limit=1)
-
-        # Se l'etichetta non esiste, la crea
         if not renewal_tag:
             renewal_tag = crm_tag.create({'name': 'Rinnovi'})
-        
-        self.env['crm.lead'].create({
-                    'name': f"Rinnovo Software - {record.customer_id.name}",
-                    'partner_id': record.customer_id.id,
-                    'type': 'opportunity',
-                    'tag_ids': [(4, renewal_tag.id)],  # Assegna l'etichetta "Rinnovi"
-                    'description': f"""
-                        <p>Rinnovo software della commessa 
-                        <strong><a href="{self.env['ir.config_parameter'].sudo().get_param('web.base.url')}/web#id={record.id}&model=tech.repair.order&view_type=form">{record.name}</a></strong> 
-                        per <strong>{record.customer_id.name}</strong>.</p>
-                        <p><strong>Scadenza:</strong> {record.renewal_date.strftime('%d/%m/%Y') if record.renewal_date else 'Data non disponibile'}</p>
-                        <p><strong>Contatto:</strong> {record.customer_id.mobile or 'Non disponibile'}</p>
-                        <p><strong>Mail:</strong> {record.customer_id.email or 'Non disponibile'}</p>
-                        <p><strong>Software da rinnovare:</strong></p>
-                        <ul>
-                            {"".join([f"<li>{software.name} - €{software.price:.2f}</li>" for software in record.software_ids])}
-                        </ul>
-                    """,
-                    'expected_revenue': sum(record.software_ids.mapped('price')),
-                    'probability': 50,
-                })
+
+        crm_lead_obj.create({
+            'name': f"Rinnovo Software - {record.customer_id.name}",
+            'partner_id': record.customer_id.id,
+            'repair_order_id': record.id,  # Associa il lead alla commessa
+            'type': 'opportunity',
+            'tag_ids': [(4, renewal_tag.id)],  # Assegna l'etichetta "Rinnovi"
+            'description': f"""
+                <p>Rinnovo software della commessa 
+                <strong><a href="{self.env['ir.config_parameter'].sudo().get_param('web.base.url')}/web#id={record.id}&model=tech.repair.order&view_type=form">{record.name}</a></strong> 
+                per <strong>{record.customer_id.name}</strong>.</p>
+                <p><strong>Scadenza:</strong> {record.renewal_date.strftime('%d/%m/%Y') if record.renewal_date else 'Data non disponibile'}</p>
+                <p><strong>Contatto:</strong> {record.customer_id.mobile or 'Non disponibile'}</p>
+                <p><strong>Mail:</strong> {record.customer_id.email or 'Non disponibile'}</p>
+                <p><strong>Software da rinnovare:</strong></p>
+                <ul>
+                    {"".join([f"<li>{line.software_id.name} - €{line.software_id.price:.2f}</li>" 
+                            for line in record.software_line_ids if line.software_id.renewal_required])}
+                </ul>
+            """,
+            'expected_revenue': sum(line.software_id.price for line in record.software_line_ids if line.software_id.renewal_required),
+            'probability': 50,
+        })
 
 
     # Gestione del tasto invia messaggio al cliente online
