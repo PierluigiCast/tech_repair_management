@@ -10,8 +10,10 @@
                 <field name="auto_delete" eval="True"/>
                 <field name="body_html" type="html">
                     <p>Buongiorno <t t-out="object.customer_id.name or ''"/>,</p>
-                    <p>Ti ricordiamo che i software installati sul tuo pc sono in scadenza il <strong> <t t-out="object.renewal_date"/> </strong>.</p>
+                    <p>Ti ricordiamo che i software installati sul tuo pc sono in scadenza il <strong> <t t-out="object.renewal_date.strftime('%d/%m/%Y')"/> </strong>.</p>
                     <p>Per evitare problemi, ti consigliamo di contattarci per il rinnovo.</p>
+                    <p> Software in scadenza:</p>
+                    <t t-out="object.renewal_softwares"/>
                     <p>Grazie!</p>
                     <p>Staff - TECH 3.0®</p>
                 </field>

@@ -77,6 +77,8 @@ class RepairOrder(models.Model):
     string='Software Installati'
     )
 
+    renewal_softwares = fields.Html(string="Software da rinnovare", compute="_compute_renewal_softwares")
+
 
 
     # Stato Fittizio per la Visualizzazione Online
@@ -664,6 +666,18 @@ class RepairOrder(models.Model):
             else:
                 record.renewal_date = False
 
+    
+    @api.depends('software_line_ids')
+    def _compute_renewal_softwares(self):
+        for record in self:
+            # Filtro le righe dei software che richiedono il rinnovo
+            softwares = record.software_line_ids.filtered(lambda l: l.software_id.renewal_required)
+            html = "<ul>"
+            for line in softwares:
+                html += "<li>%s</li>" % (line.software_id.name)
+            html += "</ul>"
+            record.renewal_softwares = html
+
     # Controlla le commesse in scadenza e invia un'email di promemoria 1 mese prima
     @api.model
     def check_repair_renewals(self):
@@ -706,9 +720,6 @@ class RepairOrder(models.Model):
                 email_values = {
                     'email_to': record.customer_id.email,
                     'email_from': f"{record.company_id.name} <{record.company_id.email or ''}>", # se vuoto, imposta quello configurato
-                    # 'body_html': mail_template.body_html
-                    #     .replace('${object.customer_id.name}', record.customer_id.name)
-                    #     .replace('${object.renewal_date}', str(record.renewal_date)),
                 }
                 
                 mail_template.send_mail(record.id, force_send=True, ) # email_values=email_values
