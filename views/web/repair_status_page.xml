@@ -8,12 +8,27 @@
 
                 <t t-if="repair">
                     <div class="card p-4 mt-3">
-                        <h4><strong>Dispositivo:</strong> <br/> <t t-esc="repair.category_id.name"/> <t t-esc="repair.model_id.name"/></h4>
+                        <table class="table table-borderless table-sm" style="border-collapse: collapse;">
+                        <colgroup>
+                            <col style="width: 33%;"/>
+                            <col style="width: 33%;"/>
+                            <col style="width: 33%;"/>
+                        </colgroup>
+                            <tr>
+                                <td class="text-start">
+                                    <h4><strong>Dispositivo:</strong> <br/> <t t-esc="repair.category_id.name"/> <t t-esc="repair.model_id.name"/></h4>
+                                </td>
+                                <td class="text-center">
+                                    <h5><strong>Stato Attuale: </strong><br/><t t-esc="customer_state"/></h5>
+                                </td>
+                            </tr>
+                        </table>
+                        
                         <table class="table table-borderless table-sm" style="border-collapse: collapse;">
                             <tbody>
                                 <tr>
-                                    <td style="font-size:13px; padding: 5px;"><strong>Numero Riparazione: </strong><t t-esc="repair.name"/></td>
-                                    <td style="font-size:13px; padding: 5px;"><strong>Stato Attuale: </strong><t t-esc="customer_state"/></td>
+                                    <td style="font-size:13px; padding: 5px;"><strong>Numero Riparazione: </strong><t t-esc="repair.name"/></td> 
+                                    <td style="font-size:13px; padding: 5px;"><strong>Seriale: </strong><t t-esc="repair.serial_number"/></td> 
                                     <td style="font-size:13px; padding: 5px;"><strong>Costo Stimato: </strong>€ <t t-esc="repair.expected_total"/></td>
                                 </tr>
                                 <tr>

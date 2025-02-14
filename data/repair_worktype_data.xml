@@ -40,8 +40,13 @@
         <field name="price">0</field>
     </record>
     <record id="tech_repair_worktype_comp_component" model="tech.repair.worktype">
-        <field name="name">Sost. Con Parti Compatibilo</field>
+        <field name="name">Sost. Con Parti Compatibili</field>
         <field name="description">Sostituzione con parti compatibili su Vostro dispositivo</field>
+        <field name="price">0</field>
+    </record>
+    <record id="tech_repair_worktype_warranty" model="tech.repair.worktype">
+        <field name="name">Gestione Garanzia</field>
+        <field name="description">Gestione garanzia Vostro dispositivo</field>
         <field name="price">0</field>
     </record>
 </odoo>

@@ -11,16 +11,20 @@
         <field name="name">Attesa Ricambi</field>
         <field name="sequence">3</field>
     </record>
+    <record id="tech_repair_state_pub_warranty" model="tech.repair.state.public">
+        <field name="name">In Gestione Garanzia</field>
+        <field name="sequence">4</field>
+    </record>
     <record id="tech_repair_state_pub_ready" model="tech.repair.state.public">
         <field name="name">In Consegna</field>
-        <field name="sequence">4</field>
+        <field name="sequence">5</field>
     </record>
     <record id="tech_repair_state_pub_done" model="tech.repair.state.public">
         <field name="name">Consegnata</field>
-        <field name="sequence">5</field>
+        <field name="sequence">6</field>
     </record>
     <record id="tech_repair_state_pub_not_done" model="tech.repair.state.public">
         <field name="name">Consegnata non Risolta</field>
-        <field name="sequence">6</field>
+        <field name="sequence">7</field>
     </record>
 </odoo>

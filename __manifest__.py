@@ -10,7 +10,7 @@
         'views/repair_order_views.xml',
         # 'views/repair_order_kanban.xml',
         # 'views/qrcodeweb/repair_management_views.xml',
-        'views/qrcodeweb/repair_status_page.xml',
+        'views/web/repair_status_page.xml',
         'views/configurazione/repair_device_views.xml',
         'views/configurazione/repair_loaner_views.xml',
         'views/configurazione/repair_category_views.xml',
