@@ -204,6 +204,7 @@ class RepairOrder(models.Model):
 
     renewal_date = fields.Date(string="Data di Rinnovo", compute="_compute_renewal_date", store=True, tracking=True)  # Scadenza della commessa
 
+    reminder_sent = fields.Boolean(string="Promemoria Inviato", default=False, copy=False) # mail scadende inviate o no
 
     chat_message_ids = fields.One2many(
         'tech.repair.chat.message',
@@ -668,10 +669,11 @@ class RepairOrder(models.Model):
         today = fields.Date.today()
         renewal_alert_date = today + timedelta(days=30)  # 1 mese prima della scadenza
 
-        # Trova le commesse con scadenza tra 30 giorni
+        # Trova le commesse con scadenza tra 30 giorni e che non hanno ancora ricevuto il promemoria
         orders_to_renew = self.search([
             ('renewal_date', '=', renewal_alert_date),
-            ('customer_id', '!=', False)
+            ('customer_id', '!=', False),
+            ('reminder_sent', '=', False)
         ])
 
         mail_template = self.env.ref('tech_repair_management.email_template_repair_renewal')
@@ -683,6 +685,9 @@ class RepairOrder(models.Model):
 
             # Crea un'opportunità CRM per il rinnovo della commessa
             self.crm_lead_creation(order)
+            
+            # Imposta il flag per non inviare nuovamente il promemoria
+            order.reminder_sent = True
 
     # Forza l'invio dell'email di rinnovo al cliente
     def action_force_send_renewal_email(self):
