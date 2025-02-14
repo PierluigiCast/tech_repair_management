@@ -8,7 +8,6 @@ access_tech_repair_model,access.tech.repair.model,model_tech_repair_model,,1,1,1
 access_tech_repair_device_category_user,access.tech.repair.device.category,model_tech_repair_device_category,,1,1,1,1
 access_tech_repair_device_brand_user,access.tech.repair.device.brand,model_tech_repair_device_brand,,1,1,1,1
 access_tech_repair_device_model_user,access.tech.repair.device.model,model_tech_repair_device_model,,1,1,1,1
-access_tech_repair_external_lab,access.tech.repair.external.lab,model_tech_repair_external_lab,,1,1,1,1
 access_tech_repair_credential,access.tech.repair.credential,model_tech_repair_credential,,1,1,1,1
 access_tech_repair_accessory,access.tech.repair.accessory,model_tech_repair_accessory,,1,1,1,1
 access_tech_repair_state_public,access.tech.repair.state.public,model_tech_repair_state_public,,1,1,1,1
@@ -17,5 +16,7 @@ access_tech_repair_device_color,access.tech.repair.device.color,model_tech_repai
 access_tech_repair_term,access.tech.repair.term,model_tech_repair_term,,1,1,1,1
 access_tech_repair_software,access.tech.repair.software,model_tech_repair_software,,1,1,1,1
 access_tech_repair_software_line,access.tech.repair.software_line,model_tech_repair_software_line,,1,1,1,1
+access_tech_repair_external_lab,access.tech.repair.external.lab,model_tech_repair_external_lab,,1,1,1,1
+access_tech_repair_external_lab_line,access.tech.repair.external.lab.line,model_tech_repair_external_lab_line,,1,1,1,1
 access_tech_repair_component,access.tech.repair.component,model_tech_repair_component,,1,1,1,1
 access_tech_repair_worktype,access.tech.repair.worktype,model_tech_repair_worktype,,1,1,1,1

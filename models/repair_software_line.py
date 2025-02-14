@@ -1,10 +1,8 @@
-import logging
 from odoo import models, fields, api
 
-class RepairOrderSoftwareLine(models.Model):
+class RepairSoftwareLine(models.Model):
     _name = 'tech.repair.software.line'
     _description = 'Riga Software per la commessa di riparazione'
-    _logger = logging.getLogger(__name__)
 
     repair_order_id = fields.Many2one(
         'tech.repair.order', 

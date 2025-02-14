@@ -86,9 +86,9 @@ class RepairOrder(models.Model):
     )
 
     # Laboratorio esterno a cui può essere inviata la riparazione
-    external_lab_ids = fields.One2many(
-        'tech.repair.external.lab',  # Collegamento al modello dei laboratori esterni
-        'tech_repair_order_id',
+    external_lab_line_ids = fields.One2many(
+        'tech.repair.external.lab.line',
+        'repair_order_id',
         string='Laboratori Esterni'
     )
 
@@ -543,10 +543,10 @@ class RepairOrder(models.Model):
 
     @api.onchange('state_id')
     def _onchange_state(self):
-        # Se la riparazione viene mandata a un laboratorio esterno, il campo external_lab_id diventa obbligatorio.
         for record in self:
             if record.state_id.is_external_lab:
-                if not record.external_lab_ids:
+                # Controlla se esiste almeno una riga di laboratorio esterno
+                if not record.external_lab_line_ids:
                     return {
                         'warning': {
                             'title': 'Attenzione',
@@ -641,11 +641,12 @@ class RepairOrder(models.Model):
 
     # Metodo per calcolare il totale previsto sottraendo l'acconto
     @api.depends('tech_repair_cost', 'advance_payment', 'components_ids', 
-             'external_lab_ids.customer_cost', 'discount_amount', 'worktype', 'software_line_ids')
+             'external_lab_line_ids.customer_cost', 'discount_amount', 'worktype', 'software_line_ids')
     def _compute_expected_total(self):
         for record in self:
             component_cost = sum(record.components_ids.mapped('lst_price'))
-            lab_cost = sum(record.external_lab_ids.mapped('customer_cost'))
+            # Somma solo i costi dei lab che devono essere aggiunti al totale
+            lab_cost = sum(record.external_lab_line_ids.filtered(lambda l: l.add_to_sum).mapped('customer_cost'))
             # Somma solo i costi dei software che devono essere aggiunti al totale
             software_cost = sum(line.software_id.price for line in record.software_line_ids if line.add_to_sum)
             worktype_cost = sum(record.worktype.mapped('price'))
@@ -705,12 +706,12 @@ class RepairOrder(models.Model):
                 email_values = {
                     'email_to': record.customer_id.email,
                     'email_from': f"{record.company_id.name} <{record.company_id.email or ''}>", # se vuoto, imposta quello configurato
-                    'body_html': mail_template.body_html
-                        .replace('${object.customer_id.name}', record.customer_id.name)
-                        .replace('${object.renewal_date}', str(record.renewal_date)),
+                    # 'body_html': mail_template.body_html
+                    #     .replace('${object.customer_id.name}', record.customer_id.name)
+                    #     .replace('${object.renewal_date}', str(record.renewal_date)),
                 }
                 
-                mail_template.send_mail(record.id, force_send=True, email_values=email_values)
+                mail_template.send_mail(record.id, force_send=True, ) # email_values=email_values
 
                 record.message_post(
                     body=f"⚡ Email di rinnovo inviata manualmente a {record.customer_id.email}.",

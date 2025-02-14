@@ -143,7 +143,7 @@
                             </group>
 						</page>
                         <page string="Lab Esterno" name="ext_lab" class="fixed-height-page">
-                            <field name="external_lab_ids" string=" ">
+                            <field name="external_lab_line_ids" string=" ">
                                 <list editable="bottom">
                                     <field name="lab_id"/>
                                     <field name="operation_description"/>
