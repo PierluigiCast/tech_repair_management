@@ -4,8 +4,7 @@
         <field name="model">tech.repair.order</field>
         <field name="arch" type="xml">
             <form string="Gestione Riparazioni">
-                 <header>
-                    
+                <header>
                     <field name="state_id" widget="badge" options="{'clickable': True}"/>
                 </header>
                 <sheet>
@@ -23,14 +22,12 @@
                             <div class="dropdown-menu" role="menu">
                                 <button name="action_force_send_renewal_email" type="object" class="dropdown-item" string="Invia Email di Rinnovo" icon="fa-envelope-open-o"/>
                             </div>
-                        </div>
-                        
-                        
+                        </div>       
                     </div>
                     <group>
                         <group>
                             <field name="name" readonly="1"/>  <!-- Numero Riparazione (Generato Automaticamente) -->
-                            <field name="customer_id" context="{'from_tech_repair_order': True}"/> <!-- Cliente options="{'no_create': True}"-->
+                            <field name="customer_id" placeholder="Cliente" context="{'from_tech_repair_order': True}"/> <!-- Cliente options="{'no_create': True}"-->
                             <field name="category_id" required="1"/>  <!-- Categoria -->
                             <field name="brand_id" required="1"/>  <!-- Marca domain="[('category_id', '=', category_id)]"-->
                             <field name="model_id" required="1" domain="[('brand_id', '=', brand_id)]"/>  <!-- Modello -->
@@ -38,27 +35,25 @@
                             <field name="aesthetic_condition"/> <!-- Condizioni Estetiche -->
                             <field name="aesthetic_state"/> 
                             <field name="serial_number"/>  <!-- Numero Seriale -->
-                            <field name="sim_pin"/>
-                            <field name="device_password"/>
-                            <field name="loaner_device_id" domain="[('status', '=', 'available')]"/> <!-- Muletto -->
                             <field name="worktype"/>
                             <field name="problem_description"/>  <!-- Descrizione Problema -->
+                            <field name="sim_pin"/>
+                            <field name="device_password"/>
                         </group>
                         <group>
+                            <field name="state_id" required="1"/>  <!-- Stato della riparazione -->
+                            <field name="customer_state_id" readonly="1"/>  <!-- Stato Visibile al Cliente -->
                             <field name="open_date" readonly="1"/>
                             <field name="close_date" readonly="1"/>
                             <field name="last_modified_date" readonly="1"/>
                             <field name="opened_by"/>  <!-- Tecnico che apre la riparazione -->
                             <field name="assigned_to"/>  <!-- Tecnico assegnato -->
-                            <field name="customer_state_id"/>  <!-- Stato Visibile al Cliente -->
                             <field name="tech_repair_cost"/>  <!-- Costo Riparazione -->
                             <field name="advance_payment"/>  <!-- Acconto -->
                             <field name="discount_amount"/>  <!-- Sconto -->
                             <field name="expected_total" readonly="1"/>  <!-- Totale Previsto -->
+                            <field name="loaner_device_id" domain="[('status', '=', 'available')]"/> <!-- Muletto -->
                         </group>
-                    </group>
-                    <group>
-                        
                     </group>
 
                     <group>
@@ -71,11 +66,10 @@
                             <field name="qr_code_int" widget="image" class="oe_avatar"/> <!-- Sezione per il QR Code Interno -->
                         </group>
                     </group>
-                    
 
                     <group>
                         <group>
-                            <field name="state_id" required="1"/>  <!-- Stato della riparazione -->
+                            
                         </group>
                         <group>
                             <field name="term_id"/> <!-- infomativa scelta -->
