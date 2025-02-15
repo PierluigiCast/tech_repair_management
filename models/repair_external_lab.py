@@ -26,3 +26,9 @@ class RepairExternalLab(models.Model):
         string='Data Rientrato',
         readonly=False,
     )
+
+    add_to_sum = fields.Boolean(
+        string="Aggiungi al totale", 
+        default=True
+    )
+

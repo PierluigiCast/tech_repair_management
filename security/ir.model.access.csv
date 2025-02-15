@@ -17,6 +17,5 @@ access_tech_repair_term,access.tech.repair.term,model_tech_repair_term,,1,1,1,1
 access_tech_repair_software,access.tech.repair.software,model_tech_repair_software,,1,1,1,1
 access_tech_repair_software_line,access.tech.repair.software_line,model_tech_repair_software_line,,1,1,1,1
 access_tech_repair_external_lab,access.tech.repair.external.lab,model_tech_repair_external_lab,,1,1,1,1
-access_tech_repair_external_lab_line,access.tech.repair.external.lab.line,model_tech_repair_external_lab_line,,1,1,1,1
 access_tech_repair_component,access.tech.repair.component,model_tech_repair_component,,1,1,1,1
 access_tech_repair_worktype,access.tech.repair.worktype,model_tech_repair_worktype,,1,1,1,1

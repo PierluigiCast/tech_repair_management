@@ -10,7 +10,7 @@ from . import repair_accessory
 from . import repair_state_public
 from . import repair_chat
 from . import repair_device_color
-from . import repair_external_lab, repair_external_lab_line
+from . import repair_external_lab
 from . import repair_software, repair_software_line
 from . import repair_component
 from . import repair_worktype

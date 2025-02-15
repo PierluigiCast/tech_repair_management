@@ -28,21 +28,21 @@
                         <group>
                             <field name="name" readonly="1"/>  <!-- Numero Riparazione (Generato Automaticamente) -->
                             <field name="customer_id" placeholder="Cliente" context="{'from_tech_repair_order': True}"/> <!-- Cliente options="{'no_create': True}"-->
-                            <field name="category_id" required="1"/>  <!-- Categoria -->
-                            <field name="brand_id" required="1"/>  <!-- Marca domain="[('category_id', '=', category_id)]"-->
-                            <field name="model_id" required="1" domain="[('brand_id', '=', brand_id)]"/>  <!-- Modello -->
-                            <field name="device_color" widget="many2one_tags"/> <!-- Colore -->
+                            <field name="category_id" placeholder="Categoria" required="1"/>  <!-- Categoria -->
+                            <field name="brand_id" placeholder="Marca" required="1"/>  <!-- Marca domain="[('category_id', '=', category_id)]"-->
+                            <field name="model_id" placeholder="Modello" required="1" domain="[('brand_id', '=', brand_id)]"/>  <!-- Modello -->
+                            <field name="device_color" placeholder="Colore" widget="many2one_tags"/> <!-- Colore -->
                             <field name="aesthetic_condition"/> <!-- Condizioni Estetiche -->
-                            <field name="aesthetic_state"/> 
-                            <field name="serial_number"/>  <!-- Numero Seriale -->
+                            <field name="aesthetic_state" placeholder="es. Graffi sulla scocca"/> 
+                            <field name="serial_number" placeholder="0123456789"/>  <!-- Numero Seriale -->
                             <field name="worktype"/>
-                            <field name="problem_description"/>  <!-- Descrizione Problema -->
-                            <field name="sim_pin"/>
-                            <field name="device_password"/>
+                            <field name="problem_description" placeholder="es. Non funziona il touch"/>  <!-- Descrizione Problema -->
+                            <field name="sim_pin" placeholder="0000"/>
+                            <field name="device_password" placeholder="Password"/>
                         </group>
                         <group>
                             <field name="state_id" required="1"/>  <!-- Stato della riparazione -->
-                            <field name="customer_state_id" readonly="1"/>  <!-- Stato Visibile al Cliente -->
+                            <field name="customer_state_id"/>  <!-- Stato Visibile al Cliente -->
                             <field name="open_date" readonly="1"/>
                             <field name="close_date" readonly="1"/>
                             <field name="last_modified_date" readonly="1"/>
@@ -137,7 +137,7 @@
                             </group>
 						</page>
                         <page string="Lab Esterno" name="ext_lab" class="fixed-height-page">
-                            <field name="external_lab_line_ids" string=" ">
+                            <field name="external_lab_ids" string=" ">
                                 <list editable="bottom">
                                     <field name="lab_id"/>
                                     <field name="operation_description"/>
@@ -145,7 +145,7 @@
                                     <field name="customer_cost"/>
                                     <field name="send_date"/>
                                     <field name="out_date"/>
-                                    <field name="add_to_sum"/>
+                                    <field name="add_to_sum" string="Aggiungi al Totale"/>
                                 </list>
                             </field>
                         </page>

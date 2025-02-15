@@ -2,6 +2,7 @@ import logging
 import base64
 import qrcode
 import os
+import re
 import uuid
 from io import BytesIO
 from odoo import models, fields, api
@@ -88,9 +89,9 @@ class RepairOrder(models.Model):
     )
 
     # Laboratorio esterno a cui può essere inviata la riparazione
-    external_lab_line_ids = fields.One2many(
-        'tech.repair.external.lab.line',
-        'repair_order_id',
+    external_lab_ids = fields.One2many(
+        'tech.repair.external.lab',
+        'tech_repair_order_id',
         string='Laboratori Esterni'
     )
 
@@ -147,13 +148,20 @@ class RepairOrder(models.Model):
     )
 
     # Operazioni svolte dal tecnico
-    # operations = fields.Text(string='Operazioni Svolte')
     operations = fields.Html(
         string="Operazioni Svolte",
         translate=True,
         sanitize=False,  # Permette HTML senza restrizioni (può essere utile se vuoi pulsanti o formattazione speciale)
         sanitize_attributes=False,
-        help="Inserisci le operazioni e usa '/' per i comandi."
+        help="Inserisci le operazioni e usa '/' per i comandi.",
+        default="""
+        <ul class="o_checklist">
+          <li>Controllata Licenza Office</li>
+          <li>Controllata Licenza Antivirus</li>
+          <li>Applicato Bollino</li>
+          <li>Effettuata Pulizia</li>
+        </ul><br/>
+        """,
         )
 
     # Costo della riparazione
@@ -548,7 +556,7 @@ class RepairOrder(models.Model):
         for record in self:
             if record.state_id.is_external_lab:
                 # Controlla se esiste almeno una riga di laboratorio esterno
-                if not record.external_lab_line_ids:
+                if not record.external_lab_ids:
                     return {
                         'warning': {
                             'title': 'Attenzione',
@@ -643,12 +651,12 @@ class RepairOrder(models.Model):
 
     # Metodo per calcolare il totale previsto sottraendo l'acconto
     @api.depends('tech_repair_cost', 'advance_payment', 'components_ids', 
-             'external_lab_line_ids.customer_cost', 'discount_amount', 'worktype', 'software_line_ids')
+             'external_lab_ids.customer_cost', 'discount_amount', 'worktype', 'software_line_ids')
     def _compute_expected_total(self):
         for record in self:
             component_cost = sum(record.components_ids.mapped('lst_price'))
             # Somma solo i costi dei lab che devono essere aggiunti al totale
-            lab_cost = sum(record.external_lab_line_ids.filtered(lambda l: l.add_to_sum).mapped('customer_cost'))
+            lab_cost = sum(record.external_lab_ids.filtered(lambda l: l.add_to_sum).mapped('customer_cost')) #
             # Somma solo i costi dei software che devono essere aggiunti al totale
             software_cost = sum(line.software_id.price for line in record.software_line_ids if line.add_to_sum)
             worktype_cost = sum(record.worktype.mapped('price'))
@@ -806,7 +814,7 @@ class RepairOrder(models.Model):
                 'type': 'success',  # Può essere 'success', 'warning', 'danger'
             }
         }
-
+    
     # Azioni per stampare il report della riparazione 
     def action_print_repair_report(self):
         return self.env.ref('tech_repair_management.action_report_repair_order').report_action(self)
