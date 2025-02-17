@@ -33,6 +33,7 @@ class RepairOrder(models.Model):
     category_id = fields.Many2one('tech.repair.device.category', string='Categoria', required=True)
     brand_id = fields.Many2one('tech.repair.device.brand', string='Marca', required=True)
     model_id = fields.Many2one('tech.repair.device.model', string='Modello', required=True)
+    model_variant = fields.Char(string="Variante")
 
     device_color = fields.Many2one(
         'tech.repair.device.color',
@@ -654,7 +655,7 @@ class RepairOrder(models.Model):
              'external_lab_ids.customer_cost', 'discount_amount', 'worktype', 'software_line_ids')
     def _compute_expected_total(self):
         for record in self:
-            component_cost = sum(record.components_ids.mapped('lst_price'))
+            component_cost = sum(record.components_ids.filtered(lambda m: m.add_to_sum).mapped('lst_price'))
             # Somma solo i costi dei lab che devono essere aggiunti al totale
             lab_cost = sum(record.external_lab_ids.filtered(lambda l: l.add_to_sum).mapped('customer_cost')) #
             # Somma solo i costi dei software che devono essere aggiunti al totale

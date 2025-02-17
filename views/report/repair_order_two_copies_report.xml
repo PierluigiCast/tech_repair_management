@@ -27,6 +27,7 @@
 
 
     <template id="repair_order_report_two_copies_template">
+    <t t-set="base_url" t-value="request and request.httprequest.url_root or ''"/>
         <t t-call="web.html_container">
             <t t-call="web.basic_layout">
                 <t t-foreach="docs" t-as="o">
@@ -58,7 +59,8 @@
                                 <td
                                     class="text-end">
                                     <!-- logo -->
-                                    <img t-att-src="'/web/image/res.company/' + str(o.company_id.id) + '/logo'" style="max-width: 200px; max-height: 80px;"/>
+                                    <!-- <img t-att-src="base_url + '/web/image/res.company/' + str(o.company_id.id) + '/logo'" style="max-width: 200px; max-height: 80px;"/> -->
+                                    <img t-att-src="'data:image/png;base64,%s' % o.company_id.logo" style="max-width: 200px; max-height: 80px;"/>
                                 </td>
                             </tr>
                             <tr>

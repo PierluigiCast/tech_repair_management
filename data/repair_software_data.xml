@@ -1,0 +1,64 @@
+<odoo>
+    <record id="tech_repair_software_antivirus" model="tech.repair.software">
+        <field name="name">Antivirus</field>
+        <field name="price">30</field>
+        <field name="renewal_required">True</field>
+        <field name="duration">12</field>
+    </record>
+    <record id="tech_repair_software_photoshop" model="tech.repair.software">
+        <field name="name">Adobe Photoshop</field>
+        <field name="price">30</field>
+        <field name="renewal_required">False</field>
+    </record>
+    <record id="tech_repair_software_illustrator" model="tech.repair.software">
+        <field name="name">Adobe Illustrator</field>
+        <field name="price">30</field>
+        <field name="renewal_required">False</field>
+    </record>
+    <record id="tech_repair_software_indesign" model="tech.repair.software">
+        <field name="name">Adobe In Design</field>
+        <field name="price">30</field>
+        <field name="renewal_required">False</field>
+    </record>
+    <record id="tech_repair_software_lightroom" model="tech.repair.software">
+        <field name="name">Adobe Lightroom</field>
+        <field name="price">30</field>
+        <field name="renewal_required">False</field>
+    </record>
+    <record id="tech_repair_software_premiere" model="tech.repair.software">
+        <field name="name">Adobe Premiere</field>
+        <field name="price">30</field>
+        <field name="renewal_required">False</field>
+    </record>
+    <record id="tech_repair_software_finalcut" model="tech.repair.software">
+        <field name="name">Apple Final Cut</field>
+        <field name="price">30</field>
+        <field name="renewal_required">False</field>
+    </record>
+    <record id="tech_repair_software_logic" model="tech.repair.software">
+        <field name="name">Apple Logic</field>
+        <field name="price">30</field>
+        <field name="renewal_required">False</field>
+    </record>
+    <record id="tech_repair_software_rhino" model="tech.repair.software">
+        <field name="name">Rhino Rhinoceros</field>
+        <field name="price">30</field>
+        <field name="renewal_required">False</field>
+    </record>
+    <record id="tech_repair_software_autocad" model="tech.repair.software">
+        <field name="name">Autodesk Autocad</field>
+        <field name="price">30</field>
+        <field name="renewal_required">False</field>
+    </record>
+    <record id="tech_repair_software_archicad" model="tech.repair.software">
+        <field name="name">Graphisoft Archicad</field>
+        <field name="price">30</field>
+        <field name="renewal_required">False</field>
+    </record>
+    <record id="tech_repair_software_office" model="tech.repair.software">
+        <field name="name">Microsoft Office</field>
+        <field name="price">20</field>
+        <field name="renewal_required">True</field>
+        <field name="duration">12</field>
+    </record>
+</odoo>
