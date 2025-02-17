@@ -149,7 +149,7 @@ class RepairOrder(models.Model):
     )
 
     # Operazioni svolte dal tecnico
-    operations = fields.Html(
+    workoperations = fields.Html(
         string="Operazioni Svolte",
         translate=True,
         sanitize=False,  # Permette HTML senza restrizioni (può essere utile se vuoi pulsanti o formattazione speciale)

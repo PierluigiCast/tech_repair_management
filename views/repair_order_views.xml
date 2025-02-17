@@ -81,7 +81,7 @@
                     <notebook>
 						<page string="Operazioni" name="desc_op" class="fixed-height-page">
                             <group>
-                                <field name="operations" widget="html"/>  <!-- Operazioni Svolte -->
+                                <field name="workoperations" widget="html"/>  <!-- Operazioni Svolte -->
                             </group>
 						</page>
                         <page string="Credenziali" name="cred_extra" class="fixed-height-page">

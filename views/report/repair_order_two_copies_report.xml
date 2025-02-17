@@ -60,7 +60,8 @@
                                     class="text-end">
                                     <!-- logo -->
                                     <!-- <img t-att-src="base_url + '/web/image/res.company/' + str(o.company_id.id) + '/logo'" style="max-width: 200px; max-height: 80px;"/> -->
-                                    <img t-att-src="'data:image/png;base64,%s' % o.company_id.logo" style="max-width: 200px; max-height: 80px;"/>
+                                    <!-- <img t-att-src="'data:image/png;base64,%s' % o.company_id.logo" style="max-width: 200px; max-height: 80px;"/> -->
+                                    <img t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 80px;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -87,7 +88,7 @@
                                     </div>
                                 </td>
                                 <td class="text-end">
-                                    <div style="font-size:8px; text-align: right !important;">
+                                    <div style="font-size:8px; text-align: right !important; margin-right:10px;">
                                         <span t-esc="(o.company_id.partner_id.street).strip()"/>
                                         <br/>
                                         <span t-esc="(o.company_id.partner_id.city or '').strip()"/>
@@ -96,7 +97,7 @@
                                         <br/>
                                         <span t-esc="o.company_id.partner_id.phone"/>
                                         <br/>
-                                        <span t-esc="o.company_id.partner_id.email"/>
+                                        <span t-esc="o.company_id.partner_id.email" style="margin-right:3px;"/>
 
                                     </div>
                                 </td>
@@ -114,6 +115,7 @@
                                     Categoria: <b><span t-field="o.category_id.name"/></b> <br/>
                                     Marca: <b><span t-field="o.brand_id.name"/></b> <br/>
                                     Modello: <b><span t-field="o.model_id.name"/></b> <br/>
+                                    Variante: <b><span t-field="o.model_variant"/></b> <br/>
                                     IMEI / Seriale: <b><span t-field="o.serial_number"/></b> <br/>
                                     Condizioni Estetiche: <b><span t-field="o.aesthetic_condition"/></b> <br/>
                                     Difetti Visivi: <b><span t-field="o.aesthetic_state"/></b> <br/>
@@ -159,9 +161,10 @@
                                 Problema:  <b><span t-field="o.problem_description"/></b> <br/>
                                 </td>
                             </tr>
-                            <tr style="font-size: 12px; min-heigth:80px;">
+                            <tr style="font-size: 10px;">
                                 <td class="text-start">
                                 Operazioni Svolte e Note di Lavorazione:
+                                <b><span t-field="o.workoperations"/></b>
                                 </td>
                             </tr>
                         </table>
@@ -231,7 +234,7 @@
                                 <td style="border: 1px solid black; padding: 8px;">
                                     <strong>Operazioni Svolte:</strong>
                                 </td>
-                                <td style="border: 1px solid black; padding: 8px;"><span t-field="o.operations"/></td>
+                                <td style="border: 1px solid black; padding: 8px;"><span t-field="o.workoperations"/></td>
                             </tr>
                             <tr>
                                 <td style="border: 1px solid black; padding: 8px;">
