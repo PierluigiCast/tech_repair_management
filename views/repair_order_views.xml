@@ -8,7 +8,7 @@
                     <field name="state_id" widget="badge" options="{'clickable': True}"/>
                 </header>
                 <sheet>
-                    <div name="button_box">
+                    <div class="oe_button_box" name="button_box">
                         <div class="btn-group">
                             <button name="action_save_repair" type="object" string="Salva" class="oe_highlight" icon="fa-save"/>
                             <!-- Dropdown Stampa -->
