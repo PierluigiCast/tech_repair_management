@@ -14,5 +14,9 @@ class RepairWorktype(models.Model):
         sanitize_attributes=False,
         help="Inserisci una descrizione completa per la stampa e usa '/' per i comandi."
         )
-    price = fields.Float(string='Prezzo', required=True, default=0.0)
-    add_to_sum = fields.Boolean(string='Agg. a Tot.', default=False)
+    price = fields.Float(string='Prezzo €', required=True, default=0.0)
+    stimated_time = fields.Integer(string='Durata (gg)', default=1)
+    extra_workflow = fields.Boolean(string='Ha lavorazioni Aggiuntive', default=False)
+    extra_workflow_name = fields.Char(string='Lavorazione')
+    extra_workflow_time = fields.Integer(string='Extra Durata(gg)', default=0)
+    extra_workflow_price = fields.Float(string='Extra Prezzo €', default=0.0)

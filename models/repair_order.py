@@ -213,6 +213,12 @@ class RepairOrder(models.Model):
     readonly=True
     )
 
+    stimated_date = fields.Date(
+    string="Data di Riconsegna Stimata",
+    readonly=True,
+    compute='_compute_stimated_date'
+    )
+
     renewal_date = fields.Date(string="Data di Rinnovo", compute="_compute_renewal_date", store=True, tracking=True)  # Scadenza della commessa
 
     reminder_sent = fields.Boolean(string="Promemoria Inviato", default=False, copy=False) # mail scadende inviate o no
@@ -314,6 +320,9 @@ class RepairOrder(models.Model):
         # Registra la data dell'ultima modifica
         if 'last_modified_date' not in vals:  # Evita un loop infinito aggiornando solo se non è già presente
             vals['last_modified_date'] = fields.Datetime.now()
+
+        if 'stimated_date' not in vals:
+            print('non esiste!')
 
         # Lista dei campi da escludere al tracciamento
         excluded_fields = ['signature','last_modified_date']  # Variabile per i campi da escludere
@@ -570,6 +579,17 @@ class RepairOrder(models.Model):
             else:
                 record.customer_state_id = False  # Resetta se non c'è un mapping
 
+
+    @api.depends('worktype')
+    def _compute_stimated_date(self):
+        if self.worktype.stimated_time:
+            today = fields.Date.today()
+            days = self.worktype.stimated_time
+            next_date = today + timedelta(days=days)
+            self.stimated_date = next_date
+        else:
+            today = fields.Date.today()
+            self.stimated_date = False
 
     @api.depends('state_id')
     def _compute_close_date(self):

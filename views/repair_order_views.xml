@@ -45,6 +45,7 @@
                             <field name="state_id" required="1"/>  <!-- Stato della riparazione -->
                             <field name="customer_state_id"/>  <!-- Stato Visibile al Cliente -->
                             <field name="open_date" readonly="1"/>
+                            <field name="stimated_date" readonly="1"/>
                             <field name="close_date" readonly="1"/>
                             <field name="last_modified_date" readonly="1"/>
                             <field name="opened_by"/>  <!-- Tecnico che apre la riparazione -->

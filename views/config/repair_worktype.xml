@@ -9,7 +9,7 @@
                         <field name="name"/>
                         <field name="description"/>
                         <field name="price"/>
-                        <field name="add_to_sum"/>
+                        <field name="stimated_time"/>
                     </group>
                 </sheet>
             </form>
@@ -24,7 +24,7 @@
                 <field name="name"/>
                 <field name="description"/>
                 <field name="price"/>
-                <field name="add_to_sum"/>
+                <field name="stimated_time"/>
             </list>
         </field>
     </record>
